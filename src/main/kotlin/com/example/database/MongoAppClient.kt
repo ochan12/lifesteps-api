@@ -38,6 +38,9 @@ class MongoAppClient @Inject constructor() {
     fun getStepsByType(type: StepType): Flow<LifeStep> {
         return client.getDatabase(db).getCollection<LifeStep>().find(LifeStep::type eq type).toFlow()
     }
+    suspend fun createStep(step: LifeStep): String {
+        return client.getDatabase(db).getCollection<LifeStep>().insertOne(step).insertedId?.toString() ?: ""
+    }
 
 
     internal class QueryBuilder {

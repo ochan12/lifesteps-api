@@ -11,8 +11,12 @@ class RemoteData @Inject constructor(private val client: MongoAppClient) : DataS
     override fun getSteps(): Flow<LifeStep> {
         return client.getSteps()
     }
-
     override fun getStepsByType(type: StepType): Flow<LifeStep> {
         return client.getStepsByType(type)
     }
+
+    override suspend fun postStep(step: LifeStep): String {
+        return client.createStep(step)
+    }
+
 }

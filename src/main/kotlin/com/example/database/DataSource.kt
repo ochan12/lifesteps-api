@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface DataSource {
     fun getSteps(): Flow<LifeStep>
     fun getStepsByType(type: StepType): Flow<LifeStep>
+    suspend fun postStep(step: LifeStep): String
 }
