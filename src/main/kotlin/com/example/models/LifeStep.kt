@@ -1,6 +1,5 @@
 package com.example.models
 
-import io.ktor.http.*
 import kotlinx.serialization.Serializable
 
 
@@ -13,6 +12,7 @@ data class LifeStep (
     val initialTime: Long? = 0,
     val endTime: Long? = 0,
     val place: Place? = null,
+    val projects: Array<Project>
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
