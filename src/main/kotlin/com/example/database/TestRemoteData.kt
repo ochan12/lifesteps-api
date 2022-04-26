@@ -21,23 +21,33 @@ class TestRemoteData @Inject constructor() : DataSource {
             GeoPosition(lat = (-31.4135).toLong(), lon = (-64.18105).toLong()),
             Locale("es", "AR").isO3Country
         )
-        Locale.getISOCountries()
+
         val sweden = Place(
             "Stockholm",
             GeoPosition(lat = (59.33258).toLong(), lon = (18.0649).toLong()),
             Locale("sv", "SE").isO3Country
         )
-        val qbit = LifeStep("Qbit", StepType.JOB, "First job", arrayOf(), 0, 1, cordoba)
-        val rd = LifeStep("Reputación digital", StepType.JOB, "BigData", arrayOf(), 2, 3, cordoba)
-        val cruncho = LifeStep("Cruncho", StepType.JOB, "Senior Full Stack Developer", arrayOf(), 4, 6, sweden)
+        val qbit =
+            LifeStep.Builder().setName("Qbit").setType(StepType.JOB).setDescription("First job").setPlace(cordoba)
+                .build()
+        val rd = LifeStep.Builder().setName("Reputación digital").setType(StepType.JOB).setDescription("BigData")
+            .setPlace(cordoba).build()
+
+
+        val cruncho =
+            LifeStep.Builder().setName("Cruncho").setType(StepType.JOB).setDescription("Senior Full Stack Developer")
+                .setPlace(sweden).build()
         steps.add(qbit)
         steps.add(rd)
         steps.add(cruncho)
 
-        val rugby = LifeStep("Rugby", StepType.HOBBY, "Sport", arrayOf(), 0, 1, cordoba)
+        val rugby =
+            LifeStep.Builder().setName("Rugby").setType(StepType.HOBBY).setDescription("Sport").setPlace(cordoba)
+                .build()
         steps.add(rugby)
 
-        val barcelona = LifeStep("Barcelona", StepType.PLACE, "First country in my long trip", arrayOf(), 0, 1)
+        val barcelona = LifeStep.Builder().setName("Barcelona").setType(StepType.PLACE)
+            .setDescription("First country in my long trip").build()
         steps.add(barcelona)
     }
 

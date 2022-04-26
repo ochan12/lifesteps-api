@@ -12,18 +12,18 @@ data class LifeStep(
     val initialTime: Long? = 0,
     val endTime: Long? = 0,
     val place: Place? = null,
-    val projects: Array<Project>
+    val projects: Array<Project>?
 ) {
 
     data class Builder(
-        var name: String? = null,
-        var type: StepType? = null,
-        var description: String? = null,
-        var photos: Array<String>? = null,
-        var initialTime: Long? = null,
-        var endTime: Long? = null,
-        var place: Place? = null,
-        var projects: Array<Project>? = null
+        private var name: String? = null,
+        private var type: StepType? = null,
+        private var description: String? = null,
+        private var photos: Array<String>? = emptyArray(),
+        private var initialTime: Long? = 0,
+        private var endTime: Long? = 0,
+        private var place: Place? = null,
+        private var projects: Array<Project>? = emptyArray()
     ) {
         fun setName(name: String) = apply { this.name = name }
         fun setType(type: StepType) = apply { this.type = type }
@@ -33,6 +33,17 @@ data class LifeStep(
         fun setEndTime(endTime: Long) = apply { this.endTime = endTime }
         fun setPlace(place: Place) = apply { this.place = place }
         fun setProjects(projects: Array<Project>) = apply { this.projects = projects }
+
+        fun build(): LifeStep = LifeStep(
+            this.name!!,
+            this.type!!,
+            this.description,
+            this.photos,
+            this.initialTime,
+            this.endTime,
+            this.place,
+            this.projects,
+        )
     }
 
     override fun equals(other: Any?): Boolean {
