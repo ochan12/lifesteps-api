@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class LifeStep (
+data class LifeStep(
     val name: String,
     val type: StepType,
     val description: String? = "",
@@ -14,6 +14,27 @@ data class LifeStep (
     val place: Place? = null,
     val projects: Array<Project>
 ) {
+
+    data class Builder(
+        var name: String? = null,
+        var type: StepType? = null,
+        var description: String? = null,
+        var photos: Array<String>? = null,
+        var initialTime: Long? = null,
+        var endTime: Long? = null,
+        var place: Place? = null,
+        var projects: Array<Project>? = null
+    ) {
+        fun setName(name: String) = apply { this.name = name }
+        fun setType(type: StepType) = apply { this.type = type }
+        fun setDescription(description: String) = apply { this.description = description }
+        fun setPhotos(photos: Array<String>) = apply { this.photos = photos }
+        fun setInitialTime(initialTime: Long) = apply { this.initialTime = initialTime }
+        fun setEndTime(endTime: Long) = apply { this.endTime = endTime }
+        fun setPlace(place: Place) = apply { this.place = place }
+        fun setProjects(projects: Array<Project>) = apply { this.projects = projects }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
