@@ -9,5 +9,6 @@ data class Project(
     val technologies: Array<Technology>?,
     val startTime: Long,
     val endTime: Long,
-    val company: String
+    val company: String?,
+    val url: String?
 )
