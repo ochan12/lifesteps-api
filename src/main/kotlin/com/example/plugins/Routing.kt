@@ -1,21 +1,14 @@
 package com.example.plugins
 
 import com.example.database.DataSource
-import com.example.database.RemoteData
-import com.example.database.RemoteData_Factory
 import com.example.models.LifeStep
 import com.example.models.StepType
 import io.ktor.server.routing.*
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import java.rmi.Remote
-import java.util.logging.Logger
-import javax.inject.Inject
 
 fun <T: DataSource>Application.configureRouting(remoteData: T) {
     routing {
@@ -32,25 +25,25 @@ fun <T: DataSource>Route.lifeRouting(remoteData: T) {
         get("/jobs") {
             runBlocking {
                 val steps = remoteData.getStepsByType(StepType.JOB).toList()
-                call.respondText(steps.joinToString(("\n")) { s -> s.toString() })
+                call.respond(steps)
             }
         }
         get("/education") {
             runBlocking {
                 val steps = remoteData.getStepsByType(StepType.EDUCATION).toList()
-                call.respondText(steps.joinToString(("\n")) { s -> s.toString() })
+                call.respond(steps)
             }
         }
         get("/places") {
             runBlocking {
                 val steps = remoteData.getStepsByType(StepType.PLACE).toList()
-                call.respondText(steps.joinToString(("\n")) { s -> s.toString() })
+                call.respond(steps)
             }
         }
         get("/hobbies") {
             runBlocking {
                 val steps = remoteData.getStepsByType(StepType.HOBBY).toList()
-                call.respondText(steps.joinToString(("\n")) { s -> s.toString() })
+                call.respond(steps)
             }
         }
         post ("/step") {
