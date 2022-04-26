@@ -9,6 +9,7 @@ plugins {
     application
     kotlin("jvm") version "1.6.21"
     kotlin("kapt") version "1.6.10"
+    kotlin("plugin.serialization") version "1.6.10"
 }
 
 group = "com.example"
@@ -35,7 +36,9 @@ dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-gson:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-serialization:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     // DI deps

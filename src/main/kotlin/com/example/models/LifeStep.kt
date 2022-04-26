@@ -1,13 +1,15 @@
 package com.example.models
 
 import io.ktor.http.*
+import kotlinx.serialization.Serializable
 
 
+@Serializable
 data class LifeStep (
     val name: String,
     val type: StepType,
     val description: String? = "",
-    val photos: Array<Url>? = emptyArray(),
+    val photos: Array<String>? = emptyArray(),
     val initialTime: Long? = 0,
     val endTime: Long? = 0,
     val place: Place? = null,

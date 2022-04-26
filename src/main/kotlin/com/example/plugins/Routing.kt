@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.database.DataSource
 import com.example.database.RemoteData
 import com.example.database.RemoteData_Factory
 import com.example.models.LifeStep
@@ -13,9 +14,10 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import java.rmi.Remote
+import java.util.logging.Logger
 import javax.inject.Inject
 
-fun Application.configureRouting(remoteData: RemoteData) {
+fun <T: DataSource>Application.configureRouting(remoteData: T) {
     routing {
         get("/") {
             call.respondText("Hello there, this is Mateo's backend!")
@@ -25,7 +27,7 @@ fun Application.configureRouting(remoteData: RemoteData) {
     }
 }
 
-fun Route.lifeRouting(remoteData: RemoteData) {
+fun <T: DataSource>Route.lifeRouting(remoteData: T) {
     route("/life") {
         get("/jobs") {
             runBlocking {

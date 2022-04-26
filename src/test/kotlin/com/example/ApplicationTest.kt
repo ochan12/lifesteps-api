@@ -1,25 +1,18 @@
 package com.example
 
-import com.example.di.DaggerApplicationComponent
-import com.example.di.DaggerTestComponent
-import io.ktor.server.auth.*
-import io.ktor.util.*
-import io.ktor.server.routing.*
+
+import com.example.models.LifeStep
 import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.request.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import io.ktor.server.config.*
 import kotlin.test.*
 import io.ktor.server.testing.*
-import com.example.plugins.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.contentnegotiation.*
-import org.litote.kmongo.json
+import org.junit.Before
 
 
 class ApplicationTest {
+
     @Test
     fun testRoot() = testApplication {
         client.get("/").apply {
@@ -30,11 +23,23 @@ class ApplicationTest {
 
     @Test
     fun testPlaces() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
         client.get("/life/places").apply {
             assertEquals(HttpStatusCode.OK, status)
-            println("Mateo")
-            println(bodyAsText())
-            assertTrue(bodyAsText().length > 0)
+            assertTrue(bodyAsText().isNotEmpty())
+        }
+    }
+
+    @Test
+    fun testEducation() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        client.get("/life/education").apply {
+            assertEquals(HttpStatusCode.OK, status)
+            assertTrue(bodyAsText().isEmpty())
         }
     }
 

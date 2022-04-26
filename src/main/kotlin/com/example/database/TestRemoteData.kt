@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Local
 
 class TestRemoteData @Inject constructor() : DataSource {
 
@@ -18,12 +19,13 @@ class TestRemoteData @Inject constructor() : DataSource {
         val cordoba = Place(
             "Córdoba",
             GeoPosition(lat = (-31.4135).toLong(), lon = (-64.18105).toLong()),
-            Locale.IsoCountryCode.valueOf("es-AR")
+            Locale("es", "AR").isO3Country
         )
+        Locale.getISOCountries()
         val sweden = Place(
             "Stockholm",
             GeoPosition(lat = (59.33258).toLong(), lon = (18.0649).toLong()),
-            Locale.IsoCountryCode.valueOf("sv-SE")
+            Locale("sv", "SE").isO3Country
         )
         val qbit = LifeStep("Qbit", StepType.JOB, "First job", arrayOf(), 0, 1, cordoba)
         val rd = LifeStep("Reputación digital", StepType.JOB, "BigData", arrayOf(), 2, 3, cordoba)
