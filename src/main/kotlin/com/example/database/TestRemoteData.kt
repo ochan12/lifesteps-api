@@ -1,12 +1,10 @@
 package com.example.database
 
-import com.example.models.GeoPosition
-import com.example.models.LifeStep
-import com.example.models.Place
-import com.example.models.StepType
+import com.example.models.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Local
@@ -14,6 +12,8 @@ import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Local
 class TestRemoteData @Inject constructor() : DataSource {
 
     val steps = arrayListOf<LifeStep>()
+    var contact: Contact? = null
+    var person: Person? = null
 
     init {
         val cordoba = Place(
@@ -49,17 +49,19 @@ class TestRemoteData @Inject constructor() : DataSource {
         val barcelona = LifeStep.Builder().setName("Barcelona").setType(StepType.PLACE)
             .setDescription("First country in my long trip").build()
         steps.add(barcelona)
+        person = Person.Builder().setName("Mateo").setSurname("Ochandorena")
+            .setBirthDate(Calendar.Builder().setDate(1996, 2, 29).build().timeInMillis).build()
+        contact = Contact.Builder().setEmail("mateochando@gmail.com").setPhone("+3512234769")
+            .setRepository("http://github.com/ochan12").build()
     }
 
     override fun getSteps(): Flow<LifeStep> {
-
         return flow {
             steps.map { s -> emit(s) }
         }
     }
 
     override fun getStepsByType(type: StepType): Flow<LifeStep> {
-        println(steps.toString())
         return flow {
             steps.filter { s -> s.type == type }.map { s -> emit(s) }
         }
@@ -68,5 +70,13 @@ class TestRemoteData @Inject constructor() : DataSource {
     override suspend fun postStep(step: LifeStep): String {
         steps.add(step)
         return steps.size.toString()
+    }
+
+    override suspend fun getContactData(): Flow<Contact?> {
+        return flow { contact }
+    }
+
+    override suspend fun getPersonalData(): Flow<Person?> {
+        return flow { person }
     }
 }

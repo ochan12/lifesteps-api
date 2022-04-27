@@ -1,26 +1,29 @@
 package com.example.plugins
 
 import com.example.database.DataSource
+import com.example.models.Contact
 import com.example.models.LifeStep
+import com.example.models.Person
 import com.example.models.StepType
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 
-fun <T: DataSource>Application.configureRouting(remoteData: T) {
+fun <T : DataSource> Application.configureRouting(remoteData: T) {
     routing {
         get("/") {
             call.respondText("Hello there, this is Mateo's backend!")
         }
         lifeRouting(remoteData)
-        contactRouting()
+        contactRouting(remoteData)
+        personRouting(remoteData)
     }
 }
 
-fun <T: DataSource>Route.lifeRouting(remoteData: T) {
+fun <T : DataSource> Route.lifeRouting(remoteData: T) {
     route("/life") {
         get("/jobs") {
             runBlocking {
@@ -46,7 +49,7 @@ fun <T: DataSource>Route.lifeRouting(remoteData: T) {
                 call.respond(steps)
             }
         }
-        post ("/step") {
+        post("/step") {
             runBlocking {
                 val step = call.receive<LifeStep>()
                 val id = remoteData.postStep(step)
@@ -56,19 +59,39 @@ fun <T: DataSource>Route.lifeRouting(remoteData: T) {
     }
 }
 
-fun Route.contactRouting() {
+fun <T : DataSource> Route.contactRouting(remoteData: T) {
     route("/contact") {
         get("/full") {
-            call.respondText("This is my job experience")
+            runBlocking {
+                val contact = remoteData.getContactData().toList()
+                call.respond(contact)
+            }
         }
         get("/email") {
-            call.respondText("Here is where I studied")
+            runBlocking {
+                val contact = remoteData.getContactData().map { d -> d?.email }
+                call.respond(contact)
+            }
         }
-        get("/github") {
-            call.respondText("This is where I travelled")
+        get("/repository") {
+            runBlocking {
+                val contact = remoteData.getContactData().map { d -> d?.repository }
+                call.respond(contact)
+            }
         }
         get("/linkedin") {
-            call.respondText("What I like doing in my free time")
+            runBlocking {
+                val contact = remoteData.getContactData().map { d -> d?.linkedIn }
+                call.respond(contact)
+            }
+        }
+    }
+}
+
+fun <T : DataSource> Route.personRouting(remoteData: T) {
+    route("/person") {
+        get("/data") {
+            call.respond(flow<Person> { remoteData.getPersonalData() })
         }
     }
 }

@@ -2,7 +2,6 @@ package com.example.models
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class LifeStep(
     val name: String,

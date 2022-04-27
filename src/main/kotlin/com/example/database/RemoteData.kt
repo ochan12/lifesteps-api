@@ -1,6 +1,8 @@
 package com.example.database
 
+import com.example.models.Contact
 import com.example.models.LifeStep
+import com.example.models.Person
 import com.example.models.StepType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
@@ -17,6 +19,14 @@ class RemoteData @Inject constructor(private val client: MongoAppClient) : DataS
 
     override suspend fun postStep(step: LifeStep): String {
         return client.createStep(step)
+    }
+
+    override suspend fun getContactData(): Flow<Contact?> {
+        return client.getContactData()
+    }
+
+    override suspend fun getPersonalData(): Flow<Person?> {
+        return client.getPersonalData()
     }
 
 }
