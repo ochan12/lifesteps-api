@@ -1,7 +1,6 @@
 package com.example.plugins
 
 import com.example.database.DataSource
-import com.example.models.Contact
 import com.example.models.LifeStep
 import com.example.models.Person
 import com.example.models.StepType
@@ -96,7 +95,7 @@ fun <T : DataSource> Route.contactRouting(remoteData: T) {
 
 fun <T : DataSource> Route.personRouting(remoteData: T) {
     route("/person") {
-        get("/data") {
+        get {
             call.respond(flow<Person> { remoteData.getPersonalData() })
         }
     }
