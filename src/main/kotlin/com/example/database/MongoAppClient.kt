@@ -35,11 +35,11 @@ class MongoAppClient @Inject constructor() {
 
     init {
         rootLogger.level = Level.ERROR
-        val lifeStep = LifeStep.Builder().setName("Qbit").setType(StepType.JOB).build()
-        val person = Person.Builder().setName("Mateo").setSurname("Ochandorena")
-            .setBirthDate(Calendar.Builder().setDate(1996, 2, 29).build().timeInMillis).build()
-        val contact = Contact.Builder().setEmail("mateochando@gmail.com").setPhone("+3512234769")
-            .setRepository("http://github.com/ochan12").build()
+//        val lifeStep = LifeStep.Builder().setName("Qbit").setType(StepType.JOB).build()
+//        val person = Person.Builder().setName("Mateo").setSurname("Ochandorena")
+//            .setBirthDate(Calendar.Builder().setDate(1996, 2, 29).build().timeInMillis).build()
+//        val contact = Contact.Builder().setEmail("mateochando@gmail.com").setPhone("+3512234769")
+//            .setRepository("http://github.com/ochan12").build()
 //        runBlocking {
 //            client.getDatabase(db).getCollection<LifeStep>().deleteMany(LifeStep::type eq StepType.JOB)
 //            client.getDatabase(db).getCollection<LifeStep>().insertOne(lifeStep)
@@ -68,8 +68,4 @@ class MongoAppClient @Inject constructor() {
         return client.getDatabase(db).getCollection<Person>().find().toFlow()
     }
 
-
-    internal class QueryBuilder {
-
-    }
 }

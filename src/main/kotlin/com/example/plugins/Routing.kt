@@ -61,28 +61,34 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
 
 fun <T : DataSource> Route.contactRouting(remoteData: T) {
     route("/contact") {
-        get("/full") {
-            runBlocking {
-                val contact = remoteData.getContactData().toList()
-                call.respond(contact)
-            }
-        }
         get("/email") {
             runBlocking {
                 val contact = remoteData.getContactData().map { d -> d?.email }
-                call.respond(contact)
+                call.respond(contact.first() ?: "")
             }
         }
         get("/repository") {
             runBlocking {
                 val contact = remoteData.getContactData().map { d -> d?.repository }
-                call.respond(contact)
+                call.respond(contact.first() ?: "")
             }
         }
         get("/linkedin") {
             runBlocking {
                 val contact = remoteData.getContactData().map { d -> d?.linkedIn }
-                call.respond(contact)
+                call.respond(contact.first() ?: "")
+            }
+        }
+        get("/phone") {
+            runBlocking {
+                val contact = remoteData.getContactData().map { d -> d?.phone }
+                call.respond(contact.first() ?: "")
+            }
+        }
+        get("/") {
+            runBlocking {
+                val contact = remoteData.getContactData().toList()
+                call.respond(contact.first() ?: "")
             }
         }
     }
