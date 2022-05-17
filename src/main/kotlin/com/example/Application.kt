@@ -18,7 +18,7 @@ fun Application.module() {
     install(ContentNegotiation){
         json()
     }
-    configureSecurity()
+    configureSecurity(appComponent.userRemoteData())
     configureRouting(appComponent.remoteData())
 }
 
@@ -28,7 +28,7 @@ fun Application.testModule() {
     install(ContentNegotiation){
         json()
     }
-    configureSecurity()
+    configureSecurity(appComponent.userRemoteData())
     configureRouting(appComponent.remoteData())
 
 }

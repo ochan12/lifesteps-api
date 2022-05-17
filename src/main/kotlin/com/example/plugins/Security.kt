@@ -1,47 +1,34 @@
 package com.example.plugins
 
+import com.example.database.UserSource
+import com.example.models.User
+import io.github.cdimascio.dotenv.dotenv
 import io.ktor.server.auth.*
-import io.ktor.util.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.request.*
-import io.ktor.server.routing.*
+import io.ktor.server.auth.jwt.*
+import io.ktor.util.*
+import java.util.logging.Logger
+import javax.swing.text.DefaultEditorKit
 
-fun Application.configureSecurity() {
-    
+fun <T : UserSource> Application.configureSecurity(userSource: T) {
+
+    val digestFunction = getDigestFunction("SHA-256") { System.getenv("AUTH_SALT") ?: dotenv()["AUTH_SALT"] }
+    val hashedUserTable = UserHashedTableAuth(
+        table = mapOf(
+            "jetbrains" to digestFunction("foobar"),
+            "admin" to digestFunction("password")
+        ),
+        digester = digestFunction
+    )
+
     authentication {
-    		basic(name = "life") {
-    			realm = "Ktor Server"
-    			validate { credentials ->
-    				if (credentials.name == credentials.password) {
-    					UserIdPrincipal(credentials.name)
-    				} else {
-    					null
-    				}
-    			}
-    		}
-    
-    	    form(name = "myauth2") {
-    	        userParamName = "user"
-    	        passwordParamName = "password"
-    	        challenge {
-    	        	/**/
-    			}
-    	    }
-    	}
+        provider("userToken") {
+            authenticate {
+                println(it.call.request.headers["Auth"])
+                it.call.request.headers["Auth"]?.let { token -> userSource.getUser(token) }
+            }
 
-    routing {
-        authenticate("life") {
-            get("/life*") {
-                val principal = call.principal<UserIdPrincipal>()!!
-                call.respondText("Hello ${principal.name}")
-            }
         }
-        authenticate("myauth1") {
-            get("/protected/route/form") {
-                val principal = call.principal<UserIdPrincipal>()!!
-                call.respondText("Hello ${principal.name}")
-            }
-        }
+
     }
 }

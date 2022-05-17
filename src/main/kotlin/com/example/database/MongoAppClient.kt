@@ -2,10 +2,7 @@ package com.example.database
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
-import com.example.models.Contact
-import com.example.models.LifeStep
-import com.example.models.Person
-import com.example.models.StepType
+import com.example.models.*
 import io.github.cdimascio.dotenv.dotenv
 import kotlinx.coroutines.flow.Flow
 import org.litote.kmongo.reactivestreams.*
@@ -55,12 +52,16 @@ class MongoAppClient @Inject constructor() {
         return client.getDatabase(db).getCollection<LifeStep>().insertOne(step).insertedId?.toString() ?: ""
     }
 
-     fun getContactData(): Flow<Contact?> {
+    fun getContactData(): Flow<Contact?> {
         return client.getDatabase(db).getCollection<Contact>().find().toFlow()
     }
 
-     fun getPersonalData(): Flow<Person?> {
+    fun getPersonalData(): Flow<Person?> {
         return client.getDatabase(db).getCollection<Person>().find().toFlow()
+    }
+
+    fun getUserFromToken(token: String): Flow<User?> {
+        return client.getDatabase(db).getCollection<User>().find(User::token eq token).limit(1).toFlow()
     }
 
 }
