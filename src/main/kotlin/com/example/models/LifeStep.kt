@@ -11,8 +11,8 @@ data class LifeStep(
     val initialTime: Long? = 0,
     val endTime: Long? = 0,
     val place: Place? = null,
+    val projects: Array<Project>? = emptyArray()
 ) {
-
     data class Builder(
         private var name: String? = null,
         private var type: StepType? = null,
@@ -21,6 +21,7 @@ data class LifeStep(
         private var initialTime: Long? = 0,
         private var endTime: Long? = 0,
         private var place: Place? = null,
+        private var projects: Array<Project>? = emptyArray()
     ) {
         fun setName(name: String) = apply { this.name = name }
         fun setType(type: StepType) = apply { this.type = type }
@@ -29,6 +30,7 @@ data class LifeStep(
         fun setInitialTime(initialTime: Long) = apply { this.initialTime = initialTime }
         fun setEndTime(endTime: Long) = apply { this.endTime = endTime }
         fun setPlace(place: Place) = apply { this.place = place }
+        fun setProjects(projects: Array<Project>?) = apply { this.projects = projects }
 
         fun build(): LifeStep = LifeStep(
             this.name!!,
@@ -38,13 +40,18 @@ data class LifeStep(
             this.initialTime,
             this.endTime,
             this.place,
+            this.projects
         )
     }
 
     fun validate(): VALID_STEP {
-        if (name.isNotEmpty() && type.name.isNotEmpty() && initialTime != null && initialTime > 0 && endTime != null && endTime > 0 && endTime > initialTime)
-            return VALID_STEP.VALID
-        return VALID_STEP.INVALID
+        if (name.isEmpty() || type.name.isEmpty())
+            return VALID_STEP.INVALID
+        if (initialTime == null || initialTime <= 0)
+            return VALID_STEP.INVALID
+        if (endTime == null || endTime <= 0 || endTime < initialTime)
+            return VALID_STEP.INVALID
+        return VALID_STEP.VALID
     }
 
     override fun equals(other: Any?): Boolean {
@@ -60,6 +67,10 @@ data class LifeStep(
             if (other.photos == null) return false
             if (!photos.contentEquals(other.photos)) return false
         } else if (other.photos != null) return false
+        if (projects != null) {
+            if (other.projects == null) return false
+            if (!projects.contentEquals(other.projects)) return false
+        } else if (other.projects != null) return false
         if (initialTime != other.initialTime) return false
         if (endTime != other.endTime) return false
         if (place != other.place) return false
@@ -72,6 +83,7 @@ data class LifeStep(
         result = 31 * result + type.hashCode()
         result = 31 * result + (description?.hashCode() ?: 0)
         result = 31 * result + (photos?.contentHashCode() ?: 0)
+        result = 31 * result + (projects?.contentHashCode() ?: 0)
         result = 31 * result + (initialTime?.hashCode() ?: 0)
         result = 31 * result + (endTime?.hashCode() ?: 0)
         result = 31 * result + (place?.hashCode() ?: 0)
