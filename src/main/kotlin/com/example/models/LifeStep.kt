@@ -11,7 +11,6 @@ data class LifeStep(
     val initialTime: Long? = 0,
     val endTime: Long? = 0,
     val place: Place? = null,
-    val projects: Array<Project>?
 ) {
 
     data class Builder(
@@ -22,7 +21,6 @@ data class LifeStep(
         private var initialTime: Long? = 0,
         private var endTime: Long? = 0,
         private var place: Place? = null,
-        private var projects: Array<Project>? = emptyArray()
     ) {
         fun setName(name: String) = apply { this.name = name }
         fun setType(type: StepType) = apply { this.type = type }
@@ -31,7 +29,7 @@ data class LifeStep(
         fun setInitialTime(initialTime: Long) = apply { this.initialTime = initialTime }
         fun setEndTime(endTime: Long) = apply { this.endTime = endTime }
         fun setPlace(place: Place) = apply { this.place = place }
-        fun setProjects(projects: Array<Project>) = apply { this.projects = projects }
+
 
         fun build(): LifeStep = LifeStep(
             this.name!!,
@@ -41,8 +39,13 @@ data class LifeStep(
             this.initialTime,
             this.endTime,
             this.place,
-            this.projects,
         )
+    }
+
+    fun validate(): VALID_STEP {
+        if (this.name.isNotEmpty() && this.type.name.isNotEmpty() && this.initialTime != null && this.initialTime > 0 && this.endTime != null && this.endTime > 0 && this.endTime > this.initialTime)
+            return VALID_STEP.VALID
+        return VALID_STEP.INVALID
     }
 
     override fun equals(other: Any?): Boolean {
@@ -74,5 +77,10 @@ data class LifeStep(
         result = 31 * result + (endTime?.hashCode() ?: 0)
         result = 31 * result + (place?.hashCode() ?: 0)
         return result
+    }
+
+    enum class VALID_STEP {
+        VALID,
+        INVALID
     }
 }

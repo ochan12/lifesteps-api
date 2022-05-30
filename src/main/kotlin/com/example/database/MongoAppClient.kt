@@ -3,7 +3,9 @@ package com.example.database
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
 import com.example.models.*
-import io.github.cdimascio.dotenv.dotenv
+import com.example.plugins.Environment
+import dagger.Module
+import dagger.Provides
 import kotlinx.coroutines.flow.Flow
 import org.litote.kmongo.reactivestreams.*
 import org.litote.kmongo.coroutine.*
@@ -15,10 +17,11 @@ import javax.inject.Singleton
 
 @Singleton
 class MongoAppClient @Inject constructor() {
-    private val user = System.getenv("MONGO_USER") ?: dotenv()["MONGO_USER"]
-    private val pass = System.getenv("MONGO_PASS") ?: dotenv()["MONGO_PASS"]
-    private val host = System.getenv("MONGO_HOST") ?: dotenv()["MONGO_HOST"]
-    private val db = System.getenv("MONGO_DB") ?: dotenv()["MONGO_DB"]
+    private val env: Environment = Environment()
+    private val user = env.getVariable("MONGO_USER")
+    private val pass = env.getVariable("MONGO_PASS")
+    private val host = env.getVariable("MONGO_HOST")
+    private val db = env.getVariable("MONGO_DB")
     private val client =
         KMongo.createClient(connectionString = "mongodb+srv://$user:$pass@$host/$db?retryWrites=true&w=majority").coroutine
 
@@ -64,4 +67,12 @@ class MongoAppClient @Inject constructor() {
         return client.getDatabase(db).getCollection<User>().find(User::token eq token).limit(1).toFlow()
     }
 
+}
+
+@Module
+class MongoAppClientModule {
+    @Provides
+    fun provide(): MongoAppClient {
+        return MongoAppClient()
+    }
 }

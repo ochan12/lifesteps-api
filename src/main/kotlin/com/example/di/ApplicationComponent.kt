@@ -9,7 +9,6 @@ import javax.inject.Singleton
 interface ApplicationComponent {
     fun remoteData(): RemoteData
     fun userRemoteData(): UserRemoteData
-
 }
 
 @Singleton

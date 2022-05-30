@@ -4,8 +4,10 @@ import com.example.database.DataSource
 import com.example.models.LifeStep
 import com.example.models.Person
 import com.example.models.StepType
+import io.ktor.http.*
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
 import kotlinx.coroutines.flow.*
@@ -16,9 +18,11 @@ fun <T : DataSource> Application.configureRouting(remoteData: T) {
         get("/") {
             call.respondText("Hello there, this is Mateo's backend!")
         }
-        lifeRouting(remoteData)
-        contactRouting(remoteData)
-        personRouting(remoteData)
+        authenticate() {
+            lifeRouting(remoteData)
+            contactRouting(remoteData)
+            personRouting(remoteData)
+        }
     }
 }
 
@@ -50,9 +54,17 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
         }
         post("/step") {
             runBlocking {
-                val step = call.receive<LifeStep>()
-                val id = remoteData.postStep(step)
-                call.respond(id)
+                try {
+                    call.receiveOrNull<LifeStep>()?.let {
+                        val id = remoteData.postStep(it)
+                        call.respond(id)
+                    }
+                } catch (e: Error) {
+                    call.respond(HttpStatusCode.BadRequest, e.toString())
+                } catch (e: Exception){
+                    println(e.toString())
+                    call.respond(HttpStatusCode.BadRequest, "Invalid LifeStep: ${e.message}")
+                }
             }
         }
     }

@@ -1,9 +1,11 @@
 package com.example.models
 
+import io.ktor.server.auth.*
+
 data class User(
     val userId: String? = "",
     val token: String? = ""
-) {
+): Principal {
 
     data class Builder(
         private var userId: String? = null,

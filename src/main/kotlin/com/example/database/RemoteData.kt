@@ -4,6 +4,8 @@ import com.example.models.Contact
 import com.example.models.LifeStep
 import com.example.models.Person
 import com.example.models.StepType
+import dagger.Module
+import dagger.Provides
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
 import org.litote.kmongo.coroutine.CoroutineClient
@@ -18,7 +20,9 @@ class RemoteData @Inject constructor(private val client: MongoAppClient) : DataS
     }
 
     override suspend fun postStep(step: LifeStep): String {
-        return client.createStep(step)
+        if(step.validate() == LifeStep.VALID_STEP.VALID)
+            return client.createStep(step)
+        throw Error(LifeStep.VALID_STEP.INVALID.name)
     }
 
     override suspend fun getContactData(): Flow<Contact?> {
@@ -29,4 +33,14 @@ class RemoteData @Inject constructor(private val client: MongoAppClient) : DataS
         return client.getPersonalData()
     }
 
+}
+
+@Module
+class RemoteDataModule {
+    @Provides
+    fun provide(
+        mongoAppClient: MongoAppClient
+    ): RemoteData {
+        return RemoteData(mongoAppClient)
+    }
 }

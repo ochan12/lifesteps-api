@@ -1,6 +1,8 @@
 package com.example.database
 
 import com.example.models.*
+import dagger.Module
+import dagger.Provides
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -78,5 +80,13 @@ class TestRemoteData @Inject constructor() : DataSource {
 
     override suspend fun getPersonalData(): Flow<Person?> {
         return flow { person }
+    }
+}
+
+@Module
+class TestRemoteDataModule {
+    @Provides
+    fun provide(): TestRemoteData {
+        return TestRemoteData()
     }
 }
