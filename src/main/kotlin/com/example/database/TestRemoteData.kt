@@ -48,9 +48,6 @@ class TestRemoteData @Inject constructor() : DataSource {
                 .build()
         steps.add(rugby)
 
-        val barcelona = LifeStep.Builder().setName("Barcelona").setType(StepType.PLACE)
-            .setDescription("First country in my long trip").build()
-        steps.add(barcelona)
         person = Person.Builder().setName("Mateo").setSurname("Ochandorena")
             .setBirthDate(Calendar.Builder().setDate(1996, 2, 29).build().timeInMillis).build()
         contact = Contact.Builder().setEmail("mateochando@gmail.com").setPhone("+3512234769")

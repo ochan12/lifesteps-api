@@ -30,7 +30,6 @@ data class LifeStep(
         fun setEndTime(endTime: Long) = apply { this.endTime = endTime }
         fun setPlace(place: Place) = apply { this.place = place }
 
-
         fun build(): LifeStep = LifeStep(
             this.name!!,
             this.type!!,
@@ -43,7 +42,7 @@ data class LifeStep(
     }
 
     fun validate(): VALID_STEP {
-        if (this.name.isNotEmpty() && this.type.name.isNotEmpty() && this.initialTime != null && this.initialTime > 0 && this.endTime != null && this.endTime > 0 && this.endTime > this.initialTime)
+        if (name.isNotEmpty() && type.name.isNotEmpty() && initialTime != null && initialTime > 0 && endTime != null && endTime > 0 && endTime > initialTime)
             return VALID_STEP.VALID
         return VALID_STEP.INVALID
     }

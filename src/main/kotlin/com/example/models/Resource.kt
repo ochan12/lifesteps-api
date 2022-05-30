@@ -2,4 +2,4 @@ package com.example.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Technology(val name: String, val logo: String)
+data class Resource(val name: String, val logo: String, val url: String)

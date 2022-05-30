@@ -22,7 +22,7 @@ class RemoteData @Inject constructor(private val client: MongoAppClient) : DataS
     override suspend fun postStep(step: LifeStep): String {
         if(step.validate() == LifeStep.VALID_STEP.VALID)
             return client.createStep(step)
-        throw Error(LifeStep.VALID_STEP.INVALID.name)
+        throw Exception(LifeStep.VALID_STEP.INVALID.name)
     }
 
     override suspend fun getContactData(): Flow<Contact?> {

@@ -28,28 +28,21 @@ fun <T : DataSource> Application.configureRouting(remoteData: T) {
 
 fun <T : DataSource> Route.lifeRouting(remoteData: T) {
     route("/life") {
-        get("/jobs") {
-            runBlocking {
-                val steps = remoteData.getStepsByType(StepType.JOB).toList()
-                call.respond(steps)
-            }
-        }
-        get("/education") {
-            runBlocking {
-                val steps = remoteData.getStepsByType(StepType.EDUCATION).toList()
-                call.respond(steps)
-            }
-        }
-        get("/places") {
-            runBlocking {
-                val steps = remoteData.getStepsByType(StepType.PLACE).toList()
-                call.respond(steps)
-            }
-        }
-        get("/hobbies") {
-            runBlocking {
-                val steps = remoteData.getStepsByType(StepType.HOBBY).toList()
-                call.respond(steps)
+        get("/{stepType}") {
+            try {
+                val stepType = when (call.parameters["stepType"]) {
+                    "jobs" -> StepType.JOB
+                    "education" -> StepType.EDUCATION
+                    "trips" -> StepType.TRAVEL
+                    "hobbies" -> StepType.HOBBY
+                    else -> throw Exception("Not a valid method")
+                }
+                runBlocking {
+                    val steps = remoteData.getStepsByType(stepType).toList()
+                    call.respond(steps)
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, e.message!!)
             }
         }
         post("/step") {
@@ -59,9 +52,7 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
                         val id = remoteData.postStep(it)
                         call.respond(id)
                     }
-                } catch (e: Error) {
-                    call.respond(HttpStatusCode.BadRequest, e.toString())
-                } catch (e: Exception){
+                } catch (e: Exception) {
                     println(e.toString())
                     call.respond(HttpStatusCode.BadRequest, "Invalid LifeStep: ${e.message}")
                 }

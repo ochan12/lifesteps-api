@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class Project(
     val name: String,
     val description: String,
-    val technologies: Array<Technology>?,
+    val resources: Array<Resource>?,
     val startTime: Long,
     val endTime: Long,
     val company: String?,

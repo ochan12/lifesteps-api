@@ -2,7 +2,7 @@ package com.example.models
 
 enum class StepType {
     HOBBY,
-    PLACE,
+    TRAVEL,
     JOB,
     EDUCATION
 }
