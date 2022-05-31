@@ -66,11 +66,11 @@ class TestRemoteData @Inject constructor() : DataSource {
                     ).setCompany("Reputación Digital").build(),
                     Project.Builder(
                         "Convert JS to Python specific Apps",
-                        "Replace JS scripts managed by PM2 processes to Python specific apps"
+                        "Replace JS scripts managed by PM2 processes to Python specific apps server-like"
                     ).setCompany("Reputación Digital").build(),
                     Project.Builder(
                         "Dockerization of stack",
-                        "Replace monolithic app by microservice apps that can be deployed into a Docker Swarm"
+                        "Replace monolithic app by microservice apps that can be deployed into a Docker Swarm, create images for each of them"
                     ).setCompany("Reputación Digital").build(),
                     Project.Builder(
                         "Website for client creation",
@@ -104,7 +104,7 @@ class TestRemoteData @Inject constructor() : DataSource {
                             "Use Google / Foursquare / TripAdvisor and other APIs to feed the guides"
                         ).setCompany("Cruncho").build(),
                         Project.Builder(
-                            "Guides Implementation",
+                            "Guides Features Implementation",
                             "Implement features about content filtering, sorting and improving the quality"
                         ).setCompany("Cruncho").build(),
                         Project.Builder(

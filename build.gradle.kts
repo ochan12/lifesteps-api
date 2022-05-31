@@ -10,13 +10,15 @@ plugins {
     kotlin("jvm") version "1.6.21"
     kotlin("kapt") version "1.6.10"
     kotlin("plugin.serialization") version "1.6.10"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+
 }
 
 group = "com.example"
 version = "0.0.1"
+
 application {
     mainClass.set("com.example.ApplicationKt")
-
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
