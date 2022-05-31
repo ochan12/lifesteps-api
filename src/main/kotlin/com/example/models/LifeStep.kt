@@ -1,6 +1,9 @@
 package com.example.models
 
 import kotlinx.serialization.Serializable
+import org.bson.codecs.pojo.annotations.BsonId
+import org.litote.kmongo.Id
+import org.litote.kmongo.newId
 
 @Serializable
 data class LifeStep(
@@ -11,7 +14,9 @@ data class LifeStep(
     val initialTime: Long? = 0,
     val endTime: Long? = 0,
     val place: Place? = null,
-    val projects: Array<Project>? = emptyArray()
+    val projects: Array<Project>? = emptyArray(),
+    val userId: String? = "",
+    @BsonId val key: Id<LifeStep> = newId(),
 ) {
     data class Builder(
         private var name: String? = null,
@@ -21,7 +26,8 @@ data class LifeStep(
         private var initialTime: Long? = 0,
         private var endTime: Long? = 0,
         private var place: Place? = null,
-        private var projects: Array<Project>? = emptyArray()
+        private var projects: Array<Project>? = emptyArray(),
+        private var userId: String? = null
     ) {
         fun setName(name: String) = apply { this.name = name }
         fun setType(type: StepType) = apply { this.type = type }
@@ -32,6 +38,8 @@ data class LifeStep(
         fun setPlace(place: Place) = apply { this.place = place }
         fun setProjects(projects: Array<Project>?) = apply { this.projects = projects }
 
+        fun setUserId(userId: String) =apply { this.userId = userId }
+
         fun build(): LifeStep = LifeStep(
             this.name!!,
             this.type!!,
@@ -40,7 +48,8 @@ data class LifeStep(
             this.initialTime,
             this.endTime,
             this.place,
-            this.projects
+            this.projects,
+            this.userId
         )
     }
 

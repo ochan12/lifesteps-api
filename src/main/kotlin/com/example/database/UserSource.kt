@@ -4,6 +4,6 @@ import com.example.models.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserSource {
-    fun getUser(token: String): Flow<User?>
+    fun getUser(username: String, token: String): Flow<User?>
 
 }
