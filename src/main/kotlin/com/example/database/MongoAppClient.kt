@@ -14,6 +14,7 @@ import org.litote.kmongo.Id
 import org.litote.kmongo.reactivestreams.*
 import org.litote.kmongo.coroutine.*
 import org.litote.kmongo.eq
+import org.litote.kmongo.id.StringId
 import org.litote.kmongo.id.toId
 import org.litote.kmongo.`in`
 import org.litote.kmongo.newId
@@ -51,8 +52,8 @@ class MongoAppClient @Inject constructor() {
                         )
                     )
                     .setEmail("mateochando@gmail.com").build()
-                val insertedUser = client.getDatabase(db).getCollection<User>().insertOne(user)
-                val userId = insertedUser.idValue.toString()
+                client.getDatabase(db).getCollection<User>().insertOne(user)
+                val userId = client.getDatabase(db).getCollection<User>().findOne(User::username eq "riggoch")?._id.toString()
 
                 val dataInitializer = DataInitializer(userId)
 
@@ -75,6 +76,7 @@ class MongoAppClient @Inject constructor() {
 
                 client.getDatabase(db).getCollection<LifeStep>().insertMany(arrayListOf(qbit, rd, cruncho))
                 client.getDatabase(db).getCollection<Person>().insertOne(dataInitializer.person)
+                client.getDatabase(db).getCollection<Resource>().insertMany(dataInitializer.resources)
 
             }
         }
@@ -107,7 +109,12 @@ class MongoAppClient @Inject constructor() {
 
     fun getProjects(projects: List<String>): Flow<Project?> {
         return client.getDatabase(db).getCollection<Project>()
-            .find(Project::key `in` projects.map { id -> ObjectId(id).toId() }).toFlow()
+            .find(Project::_id `in` projects.map { id -> ObjectId(id).toId() }).toFlow()
+    }
+
+    fun getResources(resources: List<String>): Flow<Resource?> {
+        return client.getDatabase(db).getCollection<Resource>()
+            .find(Project::_id `in` resources.map { id -> StringId(id) }).toFlow()
     }
 
 }

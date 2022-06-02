@@ -18,7 +18,8 @@ class TestRemoteData @Inject constructor() : DataSource {
     val steps = arrayListOf<LifeStep>()
     var contact: Contact? = null
     var person: Person? = null
-
+    val allProjects = mutableListOf<Project>()
+    val allResources = mutableListOf<Resource>()
     init {
         val environment = Environment()
         val user = User.Builder().setUsername("riggoch")
@@ -30,16 +31,20 @@ class TestRemoteData @Inject constructor() : DataSource {
             )
             .setEmail("mateochando@gmail.com").build()
 
-        val dataInitializer = DataInitializer(userId = user.key.toString())
+        val dataInitializer = DataInitializer(userId = user._id.toString())
         contact = dataInitializer.contact
         person = dataInitializer.person
         steps.addAll(
             listOf(
-                dataInitializer.buildQbit(dataInitializer.qbitProjects.map { p -> p.key.toString() }),
-                dataInitializer.builRd(dataInitializer.rdProjects.map { p -> p.key.toString() }),
-                dataInitializer.builCruncho(dataInitializer.crunchoProjects.map { p -> p.key.toString() }),
+                dataInitializer.buildQbit(dataInitializer.qbitProjects.map { p -> p._id.toString() }),
+                dataInitializer.builRd(dataInitializer.rdProjects.map { p -> p._id.toString() }),
+                dataInitializer.builCruncho(dataInitializer.crunchoProjects.map { p -> p._id.toString() }),
             )
         )
+        allProjects.addAll(dataInitializer.qbitProjects)
+        allProjects.addAll(dataInitializer.rdProjects)
+        allProjects.addAll(dataInitializer.crunchoProjects)
+        allResources.addAll(dataInitializer.resources)
     }
 
     override fun getSteps(): Flow<LifeStep> {
@@ -65,6 +70,14 @@ class TestRemoteData @Inject constructor() : DataSource {
 
     override suspend fun getPersonalData(): Flow<Person?> {
         return flow { person }
+    }
+
+    override suspend fun getProjects(projects: List<String>): Flow<Project?> {
+        return flow { allProjects.filter { project -> projects.contains(project._id.toString()) }}
+    }
+
+    override suspend fun getResources(resources: List<String>): Flow<Resource?> {
+        return flow { allResources.filter { resource -> resources.contains(resource._id.toString()) }}
     }
 }
 

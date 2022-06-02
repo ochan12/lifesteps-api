@@ -1,15 +1,17 @@
 package com.example.models
 
 import io.ktor.server.auth.*
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId
-
+@kotlinx.serialization.Serializable
 data class User(
     val username: String?,
     val password: String?,
     val email: String?,
-    @BsonId val key: Id<User> = newId(),
+    val _id: Id<User> = newId(),
     ): Principal {
 
     data class Builder(

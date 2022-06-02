@@ -9,18 +9,18 @@ import org.litote.kmongo.newId
 data class Project(
     val name: String,
     val description: String,
-    val resources: List<Resource>?,
+    val resources: List<String>?,
     val startTime: Long?,
     val endTime: Long?,
     val company: String?,
     val url: String?,
     val userId: String?,
-    @BsonId val key: Id<Project> = newId(),
+    val _id: Id<Project> = newId(),
 ) {
     data class Builder(
         private var name: String,
         private var description: String,
-        private var resources: List<Resource>? = emptyList(),
+        private var resources: List<String>? = emptyList(),
         private var startTime: Long? = 0,
         private var endTime: Long? = 0,
         private var company: String? = "",
@@ -31,7 +31,7 @@ data class Project(
         fun setUrl(url: String) = apply { this.url = url }
         fun setUserId(userId: String) = apply { this.userId = userId }
 
-        fun setResources(resources: List<Resource>?) = apply { this.resources = resources }
+        fun setResources(resources: List<String>?) = apply { this.resources = resources }
 
         fun setCompany(company: String?) = apply { this.company = company }
 

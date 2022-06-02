@@ -34,6 +34,10 @@ class RemoteData @Inject constructor(private val client: MongoAppClient) : DataS
         return client.getProjects(projects)
     }
 
+    override suspend fun getResources(resources: List<String>): Flow<Resource?> {
+        return client.getResources(resources)
+    }
+
 }
 
 @Module

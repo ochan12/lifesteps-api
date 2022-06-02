@@ -12,7 +12,7 @@ data class Person(
     val contact: Contact? = null,
     val birthDate: Long?,
     val userId: String? = "",
-    @BsonId val key: Id<Person> = newId(),
+    val _id: Id<Person> = newId(),
 ) {
     data class Builder(
         private var name: String? = "",

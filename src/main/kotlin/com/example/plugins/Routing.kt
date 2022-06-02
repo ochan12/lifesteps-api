@@ -42,6 +42,7 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
                     call.respond(steps)
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest, e.message!!)
             }
         }
@@ -53,9 +54,35 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
                         call.respond(id)
                     }
                 } catch (e: Exception) {
-                    println(e.toString())
+                    e.printStackTrace()
                     call.respond(HttpStatusCode.BadRequest, "Invalid LifeStep: ${e.message}")
                 }
+            }
+        }
+    }
+    route("/project") {
+        get {
+            val projectId = call.request.queryParameters["ids"]
+            if (projectId != null) {
+                runBlocking {
+                    val projects = remoteData.getProjects(projects = projectId.split(","))
+                    call.respond(projects)
+                }
+            } else {
+                call.respond(HttpStatusCode.BadRequest, "Query parameters *ids* missing")
+            }
+        }
+    }
+    route("/resource") {
+        get {
+            val projectId = call.request.queryParameters["ids"]
+            if (projectId != null) {
+                runBlocking {
+                    val projects = remoteData.getResources(resources = projectId.split(","))
+                    call.respond(projects)
+                }
+            } else {
+                call.respond(HttpStatusCode.BadRequest, "Query parameters *ids* missing")
             }
         }
     }

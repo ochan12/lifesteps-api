@@ -11,4 +11,5 @@ interface DataSource {
     suspend fun getContactData(): Flow<Contact?>
     suspend fun getPersonalData(): Flow<Person?>
     suspend fun getProjects(projects: List<String>): Flow<Project?>
+    suspend fun getResources(resources: List<String>): Flow<Resource?>
 }

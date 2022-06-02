@@ -54,6 +54,7 @@ dependencies {
     // Mongo deps
     implementation("org.litote.kmongo:kmongo:$kmongoVersion")
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongoVersion")
+    implementation("org.litote.kmongo:kmongo-id-serialization:4.1.3")
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")

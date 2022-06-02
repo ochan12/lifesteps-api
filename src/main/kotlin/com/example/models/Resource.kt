@@ -5,4 +5,4 @@ import org.litote.kmongo.Id
 import org.litote.kmongo.newId
 
 @Serializable
-data class Resource(val name: String, val logo: String, val url: String, @BsonId val key: Id<Project> = newId(),)
+data class Resource(val name: String, val logo: String, val url: String, val _id: Id<Resource> = newId())

@@ -1,8 +1,11 @@
 package com.example.models
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id
+import org.litote.kmongo.id.MongoId
 import org.litote.kmongo.newId
 
 @Serializable
@@ -14,9 +17,9 @@ data class LifeStep(
     val initialTime: Long? = 0,
     val endTime: Long? = 0,
     val place: Place? = null,
-    val projects: List<String>? = emptyList(),
+    var projects: List<String>? = emptyList(),
     val userId: String? = "",
-    @BsonId val key: Id<LifeStep> = newId(),
+    @Contextual @SerialName("_id") val _id: Id<LifeStep> = newId(),
 ) {
     data class Builder(
         private var name: String? = null,
