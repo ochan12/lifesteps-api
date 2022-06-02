@@ -25,7 +25,6 @@ data class Contact(
 
         fun setPhone(phone: String?) = apply {
             this.phone = phone
-
         }
 
         fun setLinkedIn(linkedIn: String?) = apply{

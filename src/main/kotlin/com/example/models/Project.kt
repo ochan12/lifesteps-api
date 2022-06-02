@@ -1,29 +1,37 @@
 package com.example.models
 
 import kotlinx.serialization.Serializable
+import org.bson.codecs.pojo.annotations.BsonId
+import org.litote.kmongo.Id
+import org.litote.kmongo.newId
 
 @Serializable
 data class Project(
     val name: String,
     val description: String,
-    val resources: Array<Resource>?,
+    val resources: List<Resource>?,
     val startTime: Long?,
     val endTime: Long?,
     val company: String?,
-    val url: String?
+    val url: String?,
+    val userId: String?,
+    @BsonId val key: Id<Project> = newId(),
 ) {
     data class Builder(
         private var name: String,
         private var description: String,
-        private var resources: Array<Resource>? = emptyArray(),
+        private var resources: List<Resource>? = emptyList(),
         private var startTime: Long? = 0,
         private var endTime: Long? = 0,
         private var company: String? = "",
-        private var url: String? = ""
+        private var url: String? = "",
+        private var userId: String? = "",
+        private var key: Id<Project> = newId(),
     ) {
         fun setUrl(url: String) = apply { this.url = url }
+        fun setUserId(userId: String) = apply { this.userId = userId }
 
-        fun setResources(resources: Array<Resource>?) = apply { this.resources = resources }
+        fun setResources(resources: List<Resource>?) = apply { this.resources = resources }
 
         fun setCompany(company: String?) = apply { this.company = company }
 
@@ -34,7 +42,9 @@ data class Project(
             this.startTime,
             this.endTime,
             this.company,
-            this.url
+            this.url,
+            this.userId,
+            this.key
         )
     }
 }
