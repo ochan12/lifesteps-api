@@ -1,9 +1,6 @@
 package com.example.database
 
-import com.example.models.Contact
-import com.example.models.LifeStep
-import com.example.models.Person
-import com.example.models.StepType
+import com.example.models.*
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.flow.Flow
@@ -31,6 +28,10 @@ class RemoteData @Inject constructor(private val client: MongoAppClient) : DataS
 
     override suspend fun getPersonalData(): Flow<Person?> {
         return client.getPersonalData()
+    }
+
+    override suspend fun getProjects(projects: List<String>): Flow<Project?> {
+        return client.getProjects(projects)
     }
 
 }

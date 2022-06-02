@@ -1,9 +1,6 @@
 package com.example.database
 
-import com.example.models.Contact
-import com.example.models.LifeStep
-import com.example.models.Person
-import com.example.models.StepType
+import com.example.models.*
 import kotlinx.coroutines.flow.Flow
 
 
@@ -13,4 +10,5 @@ interface DataSource {
     suspend fun postStep(step: LifeStep): String
     suspend fun getContactData(): Flow<Contact?>
     suspend fun getPersonalData(): Flow<Person?>
+    suspend fun getProjects(projects: List<String>): Flow<Project?>
 }

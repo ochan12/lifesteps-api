@@ -9,9 +9,14 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
+import org.bson.types.ObjectId
+import org.litote.kmongo.Id
 import org.litote.kmongo.reactivestreams.*
 import org.litote.kmongo.coroutine.*
 import org.litote.kmongo.eq
+import org.litote.kmongo.id.toId
+import org.litote.kmongo.`in`
+import org.litote.kmongo.newId
 import org.litote.kmongo.util.idValue
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -64,7 +69,8 @@ class MongoAppClient @Inject constructor() {
                 // Cruncho
                 companyProjects = dataInitializer.crunchoProjects
                 inserterdProjects = client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
-                val cruncho = dataInitializer.builCruncho(inserterdProjects.insertedIds.values.toList().map { toString() })
+                val cruncho =
+                    dataInitializer.builCruncho(inserterdProjects.insertedIds.values.toList().map { toString() })
 
 
                 client.getDatabase(db).getCollection<LifeStep>().insertMany(arrayListOf(qbit, rd, cruncho))
@@ -97,6 +103,11 @@ class MongoAppClient @Inject constructor() {
     fun getUserFromToken(username: String, password: String): Flow<User?> {
         return client.getDatabase(db).getCollection<User>().find(User::password eq password, User::username eq username)
             .limit(1).toFlow()
+    }
+
+    fun getProjects(projects: List<String>): Flow<Project?> {
+        return client.getDatabase(db).getCollection<Project>()
+            .find(Project::key `in` projects.map { id -> ObjectId(id).toId() }).toFlow()
     }
 
 }
