@@ -5,6 +5,7 @@ import ch.qos.logback.classic.LoggerContext
 import com.example.models.*
 import com.example.plugins.Environment
 import com.example.utils.Hasher
+import com.mongodb.client.result.InsertManyResult
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.flow.Flow
@@ -53,25 +54,38 @@ class MongoAppClient @Inject constructor() {
                     )
                     .setEmail("mateochando@gmail.com").build()
                 client.getDatabase(db).getCollection<User>().insertOne(user)
-                val userId = client.getDatabase(db).getCollection<User>().findOne(User::username eq "riggoch")?._id.toString()
+                val userId =
+                    client.getDatabase(db).getCollection<User>().findOne(User::username eq "riggoch")?._id.toString()
 
                 val dataInitializer = DataInitializer(userId)
+                var inserterdProjects: InsertManyResult
+                var ids: List<String>
+                var qbit: LifeStep
+                var rd: LifeStep
+                var cruncho: LifeStep
+
+                // TODO: Issue with inserting projects "BlockingCoroutine{Active}@31ddb930"
+                var companyProjects = dataInitializer.qbitProjects
 
                 // Qbit
-                var companyProjects = dataInitializer.qbitProjects
-                var inserterdProjects = client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
-                val qbit = dataInitializer.buildQbit(inserterdProjects.insertedIds.values.toList().map { toString() })
+                inserterdProjects = client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
+                ids = inserterdProjects.insertedIds.values.toList().map { toString() }
+                qbit = dataInitializer.buildQbit(ids)
+
 
                 // Reputacion Digital
                 companyProjects = dataInitializer.rdProjects
                 inserterdProjects = client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
-                val rd = dataInitializer.builRd(inserterdProjects.insertedIds.values.toList().map { toString() })
+                ids = inserterdProjects.insertedIds.values.toList().map { toString() }
+                rd = dataInitializer.builRd(ids)
+
 
                 // Cruncho
                 companyProjects = dataInitializer.crunchoProjects
                 inserterdProjects = client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
-                val cruncho =
-                    dataInitializer.builCruncho(inserterdProjects.insertedIds.values.toList().map { toString() })
+                ids = inserterdProjects.insertedIds.values.toList().map { toString() }
+                cruncho = dataInitializer.builCruncho(ids)
+
 
 
                 client.getDatabase(db).getCollection<LifeStep>().insertMany(arrayListOf(qbit, rd, cruncho))

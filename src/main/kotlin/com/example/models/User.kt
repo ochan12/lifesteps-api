@@ -11,7 +11,7 @@ data class User(
     val username: String?,
     val password: String?,
     val email: String?,
-    val _id: Id<User> = newId(),
+    @Contextual val _id: Id<User> = newId(),
     ): Principal {
 
     data class Builder(

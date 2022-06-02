@@ -1,5 +1,6 @@
 package com.example.models
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id
@@ -15,7 +16,7 @@ data class Project(
     val company: String?,
     val url: String?,
     val userId: String?,
-    val _id: Id<Project> = newId(),
+    @Contextual val _id: Id<Project> = newId(),
 ) {
     data class Builder(
         private var name: String,
