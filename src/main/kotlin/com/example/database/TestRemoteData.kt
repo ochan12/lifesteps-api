@@ -20,16 +20,18 @@ class TestRemoteData @Inject constructor() : DataSource {
     var person: Person? = null
     val allProjects = mutableListOf<Project>()
     val allResources = mutableListOf<Resource>()
-    init {
-        val environment = Environment()
-        val user = User.Builder().setUsername("riggoch")
-            .setPassword(
-                Hasher.sha256(
-                    environment.getVariable("PASSWORD"),
-                    environment.getVariable("AUTH_SALT")
-                )
+    val environment = Environment()
+    val user = User.Builder().setUsername("riggoch")
+        .setPassword(
+            Hasher.sha256(
+                environment.getVariable("PASSWORD"),
+                environment.getVariable("AUTH_SALT")
             )
-            .setEmail("mateochando@gmail.com").build()
+        )
+        .setEmail("mateochando@gmail.com").build()
+
+    init {
+
 
         val dataInitializer = DataInitializer(userId = user._id.toString())
         contact = dataInitializer.contact
@@ -47,13 +49,13 @@ class TestRemoteData @Inject constructor() : DataSource {
         allResources.addAll(dataInitializer.resources)
     }
 
-    override fun getSteps(): Flow<LifeStep> {
+    override fun getSteps(userId: String): Flow<LifeStep> {
         return flow {
             steps.map { s -> emit(s) }
         }
     }
 
-    override fun getStepsByType(type: StepType): Flow<LifeStep> {
+    override fun getStepsByType(type: StepType, userId: String): Flow<LifeStep> {
         return flow {
             steps.filter { s -> s.type == type }.map { s -> emit(s) }
         }
@@ -64,11 +66,11 @@ class TestRemoteData @Inject constructor() : DataSource {
         return steps.size.toString()
     }
 
-    override suspend fun getContactData(): Flow<Contact?> {
+    override suspend fun getContactData(userId: String): Flow<Contact?> {
         return flow { contact }
     }
 
-    override suspend fun getPersonalData(): Flow<Person?> {
+    override suspend fun getPersonalData(userId: String): Flow<Person?> {
         return flow { person }
     }
 

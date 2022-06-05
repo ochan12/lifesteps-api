@@ -4,6 +4,7 @@ import com.example.database.DataSource
 import com.example.models.LifeStep
 import com.example.models.Person
 import com.example.models.StepType
+import com.example.models.User
 import io.ktor.http.*
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
@@ -30,6 +31,7 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
     route("/life") {
         get("/{stepType}") {
             try {
+                println(call.principal<User>()?._id.toString())
                 val stepType = when (call.parameters["stepType"]) {
                     "jobs" -> StepType.JOB
                     "education" -> StepType.EDUCATION
@@ -38,7 +40,9 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
                     else -> throw Exception("Not a valid method")
                 }
                 runBlocking {
-                    val steps = remoteData.getStepsByType(stepType).toList()
+                    val userId = call.principal<User>()?._id.toString()
+                    println(userId)
+                    val steps = remoteData.getStepsByType(stepType, userId).toList()
                     call.respond(steps)
                 }
             } catch (e: Exception) {
@@ -92,31 +96,41 @@ fun <T : DataSource> Route.contactRouting(remoteData: T) {
     route("/contact") {
         get("/email") {
             runBlocking {
-                val contact = remoteData.getContactData().map { d -> d?.email }
+                val userId = call.principal<User>()?._id.toString()
+                println(userId)
+                val contact = remoteData.getContactData(userId).map { d -> d?.email }
                 call.respond(contact.first() ?: "")
             }
         }
         get("/repository") {
             runBlocking {
-                val contact = remoteData.getContactData().map { d -> d?.repository }
+                val userId = call.principal<User>()?._id.toString()
+                println(userId)
+                val contact = remoteData.getContactData(userId).map { d -> d?.repository }
                 call.respond(contact.first() ?: "")
             }
         }
         get("/linkedin") {
             runBlocking {
-                val contact = remoteData.getContactData().map { d -> d?.linkedIn }
+                val userId = call.principal<User>()?._id.toString()
+                println(userId)
+                val contact = remoteData.getContactData(userId).map { d -> d?.linkedIn }
                 call.respond(contact.first() ?: "")
             }
         }
         get("/phone") {
             runBlocking {
-                val contact = remoteData.getContactData().map { d -> d?.phone }
+                val userId = call.principal<User>()?._id.toString()
+                println(userId)
+                val contact = remoteData.getContactData(userId).map { d -> d?.phone }
                 call.respond(contact.first() ?: "")
             }
         }
         get("/") {
             runBlocking {
-                val contact = remoteData.getContactData().toList()
+                val userId = call.principal<User>()?._id.toString()
+                println(userId)
+                val contact = remoteData.getContactData(userId).toList()
                 call.respond(contact.first() ?: "")
             }
         }
@@ -126,7 +140,9 @@ fun <T : DataSource> Route.contactRouting(remoteData: T) {
 fun <T : DataSource> Route.personRouting(remoteData: T) {
     route("/person") {
         get {
-            call.respond(flow<Person> { remoteData.getPersonalData() })
+            val userId = call.principal<User>()?._id.toString()
+            println(userId)
+            call.respond(flow<Person> { remoteData.getPersonalData(userId) })
         }
     }
 }

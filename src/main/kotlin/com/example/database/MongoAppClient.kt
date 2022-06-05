@@ -5,20 +5,20 @@ import ch.qos.logback.classic.LoggerContext
 import com.example.models.*
 import com.example.plugins.Environment
 import com.example.utils.Hasher
+import com.mongodb.client.model.Filters
 import com.mongodb.client.result.InsertManyResult
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
+import org.bson.conversions.Bson
 import org.bson.types.ObjectId
-import org.litote.kmongo.Id
+import org.litote.kmongo.*
 import org.litote.kmongo.reactivestreams.*
 import org.litote.kmongo.coroutine.*
-import org.litote.kmongo.eq
 import org.litote.kmongo.id.StringId
 import org.litote.kmongo.id.toId
-import org.litote.kmongo.`in`
-import org.litote.kmongo.newId
+import org.litote.kmongo.reactivestreams.KMongo
 import org.litote.kmongo.util.idValue
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -87,24 +87,25 @@ class MongoAppClient @Inject constructor() {
         }
     }
 
-    fun getSteps(): Flow<LifeStep> {
-        return client.getDatabase(db).getCollection<LifeStep>().find().toFlow()
+    fun getSteps(userId: String): Flow<LifeStep> {
+        return client.getDatabase(db).getCollection<LifeStep>().find(LifeStep::userId eq userId).toFlow()
     }
 
-    fun getStepsByType(type: StepType): Flow<LifeStep> {
-        return client.getDatabase(db).getCollection<LifeStep>().find(LifeStep::type eq type).toFlow()
+    fun getStepsByType(type: StepType, userId: String): Flow<LifeStep> {
+        return client.getDatabase(db).getCollection<LifeStep>().find(LifeStep::type eq type, LifeStep::userId eq userId)
+            .toFlow()
     }
 
     suspend fun createStep(step: LifeStep): String {
         return client.getDatabase(db).getCollection<LifeStep>().insertOne(step).insertedId?.toString() ?: ""
     }
 
-    fun getContactData(): Flow<Contact?> {
-        return client.getDatabase(db).getCollection<Contact>().find().toFlow()
+    fun getContactData(userId: String): Flow<Contact?> {
+        return client.getDatabase(db).getCollection<Contact>().find(LifeStep::userId eq userId).toFlow()
     }
 
-    fun getPersonalData(): Flow<Person?> {
-        return client.getDatabase(db).getCollection<Person>().find().toFlow()
+    fun getPersonalData(userId: String): Flow<Person?> {
+        return client.getDatabase(db).getCollection<Person>().find(LifeStep::userId eq userId).toFlow()
     }
 
     fun getUserFromToken(username: String, password: String): Flow<User?> {
