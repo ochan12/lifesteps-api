@@ -38,7 +38,7 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
                 }
                 runBlocking {
                     val userId = call.principal<User>()?._id.toString()
-                    val steps = remoteData.getStepsByType(stepType, userId).toList().map {
+                    val steps = remoteData.getStepsByType(stepType, userId).map {
                         val projects: List<Project>
                         if (it.projects != null) {
                             projects = remoteData.getProjects(it.projects!!).toList() as List<Project>
