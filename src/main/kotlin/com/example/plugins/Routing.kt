@@ -1,16 +1,14 @@
 package com.example.plugins
 
 import com.example.database.DataSource
-import com.example.models.LifeStep
-import com.example.models.Person
-import com.example.models.StepType
-import com.example.models.User
+import com.example.models.*
 import io.ktor.http.*
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 
@@ -40,7 +38,15 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
                 }
                 runBlocking {
                     val userId = call.principal<User>()?._id.toString()
-                    val steps = remoteData.getStepsByType(stepType, userId).toList()
+                    val steps = remoteData.getStepsByType(stepType, userId).toList().map {
+                        val projects: List<Project>
+                        if (it.projects != null) {
+                            projects = remoteData.getProjects(it.projects!!).toList() as List<Project>
+                        } else {
+                            projects = emptyList()
+                        }
+                        LifeStepWithProjects.Builder(it, projects).build()
+                    }
                     call.respond(steps)
                 }
             } catch (e: Exception) {
