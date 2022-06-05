@@ -31,7 +31,6 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
     route("/life") {
         get("/{stepType}") {
             try {
-                println(call.principal<User>()?._id.toString())
                 val stepType = when (call.parameters["stepType"]) {
                     "jobs" -> StepType.JOB
                     "education" -> StepType.EDUCATION
@@ -41,7 +40,6 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
                 }
                 runBlocking {
                     val userId = call.principal<User>()?._id.toString()
-                    println(userId)
                     val steps = remoteData.getStepsByType(stepType, userId).toList()
                     call.respond(steps)
                 }
@@ -97,7 +95,6 @@ fun <T : DataSource> Route.contactRouting(remoteData: T) {
         get("/email") {
             runBlocking {
                 val userId = call.principal<User>()?._id.toString()
-                println(userId)
                 val contact = remoteData.getContactData(userId).map { d -> d?.email }
                 call.respond(contact.first() ?: "")
             }
@@ -105,7 +102,6 @@ fun <T : DataSource> Route.contactRouting(remoteData: T) {
         get("/repository") {
             runBlocking {
                 val userId = call.principal<User>()?._id.toString()
-                println(userId)
                 val contact = remoteData.getContactData(userId).map { d -> d?.repository }
                 call.respond(contact.first() ?: "")
             }
@@ -113,7 +109,6 @@ fun <T : DataSource> Route.contactRouting(remoteData: T) {
         get("/linkedin") {
             runBlocking {
                 val userId = call.principal<User>()?._id.toString()
-                println(userId)
                 val contact = remoteData.getContactData(userId).map { d -> d?.linkedIn }
                 call.respond(contact.first() ?: "")
             }
@@ -121,7 +116,6 @@ fun <T : DataSource> Route.contactRouting(remoteData: T) {
         get("/phone") {
             runBlocking {
                 val userId = call.principal<User>()?._id.toString()
-                println(userId)
                 val contact = remoteData.getContactData(userId).map { d -> d?.phone }
                 call.respond(contact.first() ?: "")
             }
@@ -129,7 +123,6 @@ fun <T : DataSource> Route.contactRouting(remoteData: T) {
         get("/") {
             runBlocking {
                 val userId = call.principal<User>()?._id.toString()
-                println(userId)
                 val contact = remoteData.getContactData(userId).toList()
                 call.respond(contact.first() ?: "")
             }
@@ -141,7 +134,6 @@ fun <T : DataSource> Route.personRouting(remoteData: T) {
     route("/person") {
         get {
             val userId = call.principal<User>()?._id.toString()
-            println(userId)
             call.respond(flow<Person> { remoteData.getPersonalData(userId) })
         }
     }
