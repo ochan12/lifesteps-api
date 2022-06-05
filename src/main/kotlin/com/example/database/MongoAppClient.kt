@@ -58,33 +58,24 @@ class MongoAppClient @Inject constructor() {
                     client.getDatabase(db).getCollection<User>().findOne(User::username eq "riggoch")?._id.toString()
 
                 val dataInitializer = DataInitializer(userId)
-                var inserterdProjects: InsertManyResult
-                var ids: List<String>
-                var qbit: LifeStep
-                var rd: LifeStep
-                var cruncho: LifeStep
-
-                // TODO: Issue with inserting projects "BlockingCoroutine{Active}@31ddb930"
                 var companyProjects = dataInitializer.qbitProjects
 
+                println("insert qbit projects")
                 // Qbit
-                inserterdProjects = client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
-                ids = inserterdProjects.insertedIds.values.toList().map { toString() }
-                qbit = dataInitializer.buildQbit(ids)
+                client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
+                val qbit = dataInitializer.buildQbit(companyProjects.map { p -> p._id.toString() })
 
 
                 // Reputacion Digital
                 companyProjects = dataInitializer.rdProjects
-                inserterdProjects = client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
-                ids = inserterdProjects.insertedIds.values.toList().map { toString() }
-                rd = dataInitializer.builRd(ids)
+                client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
+                val rd = dataInitializer.builRd(companyProjects.map { p -> p._id.toString() })
 
 
                 // Cruncho
                 companyProjects = dataInitializer.crunchoProjects
-                inserterdProjects = client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
-                ids = inserterdProjects.insertedIds.values.toList().map { toString() }
-                cruncho = dataInitializer.builCruncho(ids)
+                client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
+                val cruncho = dataInitializer.builCruncho(companyProjects.map { p -> p._id.toString() })
 
 
 
