@@ -46,7 +46,7 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
                             projects = emptyList()
                         }
                         LifeStepWithProjects.Builder(it, projects).build()
-                    }
+                    }.toList()
                     call.respond(steps)
                 }
             } catch (e: Exception) {
@@ -81,12 +81,12 @@ fun <T : DataSource> Route.lifeRouting(remoteData: T) {
             }
         }
     }
-    route("/resource") {
+    route("/resources") {
         get {
             val projectId = call.request.queryParameters["ids"]
             if (projectId != null) {
                 runBlocking {
-                    val projects = remoteData.getResources(resources = projectId.split(","))
+                    val projects = remoteData.getResources(resources = projectId.split(",")).toList()
                     call.respond(projects)
                 }
             } else {

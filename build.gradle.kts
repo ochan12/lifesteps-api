@@ -45,6 +45,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
+    implementation("io.ktor:ktor-server-cors:$ktorVersion")
 
     // DI deps
     implementation("javax.inject:javax.inject:1")

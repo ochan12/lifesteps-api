@@ -14,7 +14,7 @@ data class LifeStepWithProjects(
     val projects: List<Project>? = emptyList(),
     val userId: String? = "",
 ) {
-
+    @Serializable
     data class Builder(
         val lifeStep: LifeStep, val projectsParameter: List<Project>?
     ) {

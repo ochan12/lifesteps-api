@@ -33,8 +33,8 @@ data class DataInitializer(val userId: String) {
 
     val rdProjects = listOf(
         Project.Builder(
-            "Twitter/Facebook/YouTube/Instagram/Google News API Ingestion",
-            "Create applications to ingest data in an automated way"
+            "API Ingestion",
+            "Create applications to ingest data from Twitter, Facebook, YouTube, Instagram, Google News APIs in an automated way"
         ).setResources(listOf("python", "gunicorn")),
         Project.Builder(
             "Convert JS to Python specific Apps",
@@ -62,15 +62,15 @@ data class DataInitializer(val userId: String) {
         Project.Builder(
             "Event Manager",
             "Implementation of an Event Manager to handle events and publish them into an event calendar"
-        ).setResources(listOf("aws", "mongodb", "react")),
+        ).setUrl("https://cruncho.com/event-calendar/").setResources(listOf("aws", "mongodb", "react")),
         Project.Builder(
             "Implement APIs Ingestion",
             "Use Google / Foursquare / TripAdvisor and other APIs to feed the guides"
-        ).setResources(listOf("express", "redis")),
+        ).setResources(listOf("express", "redis", "node", "mongodb")),
         Project.Builder(
             "Guides Features Implementation",
             "Implement features about content filtering, sorting and improving the quality"
-        ).setResources(listOf("react", "redux", "typescript", "sass")),
+        ).setUrl("https://stockholm.cruncho.co/").setResources(listOf("react", "redux", "typescript", "sass")),
         Project.Builder(
             "Migrate Amplify Database",
             "Move Amplify to own hosted database"
@@ -82,7 +82,7 @@ data class DataInitializer(val userId: String) {
         Project.Builder(
             "Events API",
             "Created an API to be consumed directly by our clients with token authorization and content filtering"
-        ).setResources(listOf("redis", "mongodb", "fastify", "node", "docker", "typescript")),
+        ).setUrl("https://events-api.cruncho.co/swagger").setResources(listOf("redis", "mongodb", "fastify", "node", "docker", "typescript")),
         Project.Builder(
             "Guides API",
             "Developed features for internal consumption of our own guides. "
@@ -113,10 +113,11 @@ data class DataInitializer(val userId: String) {
         return LifeStep.Builder().setName("Reputación digital")
             .setType(StepType.JOB).setDescription("BigData")
             .setInitialTime(
-                Calendar.Builder().setDate(2019, 4, 15).build().timeInMillis
+                Calendar.Builder().setDate(2019, 3, 15).build().timeInMillis
             ).setEndTime(
-                Calendar.Builder().setDate(2020, 4, 1).build().timeInMillis
+                Calendar.Builder().setDate(2020, 3, 1).build().timeInMillis
             )
+            .setPhotos(listOf("/img/jobs/rd.png"))
             .setProjects(projectsId).setUserId(userId)
             .setPlace(cordoba).build()
     }
@@ -125,10 +126,11 @@ data class DataInitializer(val userId: String) {
         return LifeStep.Builder().setName("Cruncho")
             .setType(StepType.JOB).setDescription("Senior Full Stack Developer")
             .setInitialTime(
-                Calendar.Builder().setDate(2020, 10, 19).build().timeInMillis
+                Calendar.Builder().setDate(2020, 9, 19).build().timeInMillis
             ).setProjects(
                 projectsId
             ).setUserId(userId)
+            .setPhotos(listOf("/img/jobs/cruncho.png"))
             .setPlace(sweden).build()
     }
 
@@ -137,12 +139,13 @@ data class DataInitializer(val userId: String) {
             .setType(StepType.JOB).setDescription("First job")
             .setPlace(cordoba)
             .setInitialTime(
-                Calendar.Builder().setDate(2018, 5, 1).build().timeInMillis
+                Calendar.Builder().setDate(2018, 4, 1).build().timeInMillis
             ).setEndTime(
-                Calendar.Builder().setDate(2019, 4, 1).build().timeInMillis
+                Calendar.Builder().setDate(2019, 3, 1).build().timeInMillis
             ).setProjects(
                 projectsId
             ).setUserId(userId)
+            .setPhotos(listOf("/img/jobs/qbit.png"))
             .build()
     }
 
@@ -160,13 +163,13 @@ data class DataInitializer(val userId: String) {
         ),
         Resource(
             "Node.js",
-            "https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg",
+            "/img/logos/logo_node.png",
             "https://nodejs.org/en/",
             StringId("node")
         ),
         Resource(
             "Docker",
-            "https://upload.wikimedia.org/wikipedia/commons/4/4e/Docker_%28container_engine%29_logo.svg",
+            "/img/logos/logo_docker.png",
             "https://www.docker.com/",
             StringId("docker")
         ),
@@ -184,13 +187,13 @@ data class DataInitializer(val userId: String) {
         ),
         Resource(
             "Elastic",
-            "https://images.contentstack.io/v3/assets/bltefdd0b53724fa2ce/blt280217a63b82a734/6202d3378b1f312528798412/elastic-logo.svg",
+            "/img/logos/logo_elastic.png",
             "https://www.elastic.co/",
             StringId("elastic")
         ),
         Resource(
             "Redis",
-            "https://redis.com/wp-content/themes/wpx/assets/images/logo-redis.svg?auto=webp&quality=85,75&width=120",
+            "/img/logos/logo_redis.png",
             "https://redis.io/",
             StringId("redis")
         ),
@@ -220,7 +223,7 @@ data class DataInitializer(val userId: String) {
         ),
         Resource(
             "Java",
-            "https://en.wikipedia.org/wiki/File:Java_programming_language_logo.svg#/media/File:Java_programming_language_logo.svg",
+            "/img/logos/logo_java.png",
             "https://www.java.com/en/",
             StringId("java")
         ),
@@ -238,7 +241,7 @@ data class DataInitializer(val userId: String) {
         ),
         Resource(
             "Webpack",
-            "https://webpack.js.org/site-logo.1fcab817090e78435061.svg",
+            "/img/logos/logo_webpack.png",
             "https://webpack.js.org/",
             StringId("webpack")
         ),
@@ -286,7 +289,7 @@ data class DataInitializer(val userId: String) {
         ),
         Resource(
             "Redux",
-            "https://upload.wikimedia.org/wikipedia/commons/4/49/Redux.png",
+            "/img/logos/logo_redux.svg",
             "https://redux.js.org/",
             StringId("redux")
         ),
@@ -304,15 +307,21 @@ data class DataInitializer(val userId: String) {
         ),
         Resource(
             "Fastify",
-            "https://upload.wikimedia.org/wikipedia/commons/0/0a/Fastify_logo.svg",
+            "/img/logos/logo_fastify.png",
             "https://www.fastify.io/",
             StringId("fastify")
         ),
         Resource(
             "Gunicorn",
-            "https://upload.wikimedia.org/wikipedia/commons/0/00/Gunicorn_logo_2010.svg",
+            "/img/logos/logo_gunicorn.png",
             "https://gunicorn.org/",
             StringId("gunicorn")
+        ),
+        Resource(
+            "MongoDB",
+            "/img/logos/logo_mongo.svg",
+            "https://www.mongodb.com/",
+            StringId("mongodb")
         )
     )
 
