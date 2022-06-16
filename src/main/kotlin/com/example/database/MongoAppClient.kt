@@ -93,6 +93,7 @@ class MongoAppClient @Inject constructor() {
 
     fun getStepsByType(type: StepType, userId: String): Flow<LifeStep> {
         return client.getDatabase(db).getCollection<LifeStep>().find(LifeStep::type eq type, LifeStep::userId eq userId)
+            .sort(LifeStep::initialTime eq 1)
             .toFlow()
     }
 
