@@ -28,6 +28,7 @@ fun Application.module() {
         allowMethod(HttpMethod.Delete)
         allowHeader(HttpHeaders.ContentType)
         allowHeader(HttpHeaders.Authorization)
+        allowCredentials = true
     }
     install(ContentNegotiation){
         json(
