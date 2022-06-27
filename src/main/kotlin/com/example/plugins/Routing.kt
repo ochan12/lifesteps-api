@@ -141,7 +141,9 @@ fun <T : DataSource> Route.personRouting(remoteData: T) {
     route("/person") {
         get {
             val userId = call.principal<User>()?._id.toString()
-            call.respond(flow<Person> { remoteData.getPersonalData(userId) })
+            val person = remoteData.getPersonalData(userId).toList()
+            if (person.isEmpty()) call.respond(HttpStatusCode.NoContent, "No user id")
+            else call.respond(HttpStatusCode.OK, person.first() ?: "No content")
         }
     }
 }

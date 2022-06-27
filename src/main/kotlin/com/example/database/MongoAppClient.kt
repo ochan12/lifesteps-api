@@ -114,7 +114,7 @@ class MongoAppClient @Inject constructor() {
     }
 
     fun getPersonalData(userId: String): Flow<Person?> {
-        return client.getDatabase(db).getCollection<Person>().find(LifeStep::userId eq userId).toFlow()
+        return client.getDatabase(db).getCollection<Person>().find(Person::userId eq userId).toFlow()
     }
 
     fun getUserFromToken(username: String, password: String): Flow<User?> {
