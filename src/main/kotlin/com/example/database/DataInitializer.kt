@@ -170,9 +170,12 @@ data class DataInitializer(val userId: String) {
         Project.Builder("My website", "YOU'RE HERE!").setResources(listOf("reactjs", "nextjs", "sass"))
             .setUserId(userId)
             .setCompany("Solo").setUrl("https://riggoch.vercel.app/").build(),
-        Project.Builder("myLook", "Thesis graduation project to promote small clothing stores reaching out to clients")
+        Project.Builder(
+            "myLook",
+            "Thesis graduation project to promote small clothing stores reaching out to clients. This was a group project where I took mainly of Android features"
+        )
             .setResources(listOf("android", "firebase")).setUserId(userId)
-            .setCompany("Solo").build(),
+            .setCompany("Solo").setUrl("https://github.com/myLook2018/myLook").build(),
         Project.Builder("TimeTracker", "Android app to track periods of time")
             .setResources(listOf("android", "firebase", "dagger", "kotlin")).setUserId(userId)
             .setUrl("https://github.com/ochan12/TimeTracker")
@@ -388,7 +391,7 @@ data class DataInitializer(val userId: String) {
             StringId("bitbucket")
         ), Resource(
             "Heroku",
-            "https://upload.wikimedia.org/wikipedia/commons/e/ec/Heroku_logo.svg",
+            "/img/logos/logo_heroku.svg",
             "https://heroku.com",
             StringId("heroku")
         ), Resource(
@@ -398,11 +401,11 @@ data class DataInitializer(val userId: String) {
             StringId("kotlin")
         ), Resource(
             "Android",
-            "https://upload.wikimedia.org/wikipedia/commons/3/3e/Android_logo_2019.png",
+            "/img/logos/logo_android.svg",
             "https://www.android.com/",
             StringId("android")
         ), Resource(
-            "Dagger", "/img/logos/dagger.svg", "https://dagger.dev/", StringId("dagger")
+            "Dagger", "", "https://dagger.dev/", StringId("dagger")
         ), Resource(
             "Redux", "/img/logos/logo_redux.svg", "https://redux.js.org/", StringId("redux")
         ), Resource(

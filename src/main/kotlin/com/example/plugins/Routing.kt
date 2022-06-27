@@ -126,11 +126,12 @@ fun <T : DataSource> Route.contactRouting(remoteData: T) {
                 call.respond(contact.first() ?: "")
             }
         }
-        get("/") {
+        get("") {
             runBlocking {
                 val userId = call.principal<User>()?._id.toString()
                 val contact = remoteData.getContactData(userId).toList()
-                call.respond(contact.first() ?: "")
+                if (contact.isEmpty()) call.respond(HttpStatusCode.NoContent, "No user id")
+                else call.respond(HttpStatusCode.OK, contact.first() ?: "No content")
             }
         }
     }

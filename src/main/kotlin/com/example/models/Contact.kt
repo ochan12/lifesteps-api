@@ -7,7 +7,8 @@ data class Contact(
     val repository: String? = null,
     val email: String? = null,
     val phone: String? = null,
-    val linkedIn: String? = null
+    val linkedIn: String? = null,
+    val userId: String? = "",
 ) {
     data class Builder(
         private var repository: String? = null,

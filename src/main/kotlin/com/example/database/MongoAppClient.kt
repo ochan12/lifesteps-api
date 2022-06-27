@@ -10,6 +10,7 @@ import com.mongodb.client.result.InsertManyResult
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import org.bson.conversions.Bson
 import org.bson.types.ObjectId
@@ -108,7 +109,8 @@ class MongoAppClient @Inject constructor() {
     }
 
     fun getContactData(userId: String): Flow<Contact?> {
-        return client.getDatabase(db).getCollection<Contact>().find(LifeStep::userId eq userId).toFlow()
+        val query = client.getDatabase(db).getCollection<Person>().find(Person::userId eq userId)
+        return query.toFlow().map { value: Person -> value.contact }
     }
 
     fun getPersonalData(userId: String): Flow<Person?> {
