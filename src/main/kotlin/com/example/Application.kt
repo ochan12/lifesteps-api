@@ -18,7 +18,7 @@ import org.litote.kmongo.id.serialization.IdKotlinXSerializationModule
 fun main(args: Array<String>) = EngineMain.main(args)
 
 fun Application.module() {
-    val dotenv = Dotenv.configure()
+    val dotenv = Dotenv.configure().ignoreIfMalformed().ignoreIfMissing()
     val appComponent = DaggerApplicationComponent.create()
     install(CORS) {
         anyHost()
