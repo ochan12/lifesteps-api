@@ -1,9 +1,9 @@
-FROM gradle:8.3.0-jdk20 AS build
+FROM gradle:7.4.2-jdk17 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle shadowJar
 
-FROM openjdk:20
+FROM openjdk:17.0.2-jdk
 EXPOSE 8080:8080
 RUN mkdir /app
 COPY --from=build /home/gradle/src/build/libs/*-all.jar /app/ktor-docker-sample.jar
