@@ -39,8 +39,8 @@ class TestRemoteData @Inject constructor() : DataSource {
         steps.addAll(
             listOf(
                 dataInitializer.buildQbit(dataInitializer.qbitProjects.map { p -> p._id.toString() }),
-                dataInitializer.builRd(dataInitializer.rdProjects.map { p -> p._id.toString() }),
-                dataInitializer.builCruncho(dataInitializer.crunchoProjects.map { p -> p._id.toString() }),
+                dataInitializer.buildRd(dataInitializer.rdProjects.map { p -> p._id.toString() }),
+                dataInitializer.buildCruncho(dataInitializer.crunchoProjects.map { p -> p._id.toString() }),
             )
         )
         allProjects.addAll(dataInitializer.qbitProjects)

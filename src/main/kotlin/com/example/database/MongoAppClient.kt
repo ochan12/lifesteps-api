@@ -61,7 +61,6 @@ class MongoAppClient @Inject constructor() {
                 val dataInitializer = DataInitializer(userId)
                 var companyProjects = dataInitializer.qbitProjects
 
-                println("insert qbit projects")
                 // Qbit
                 client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
                 val qbit = dataInitializer.buildQbit(companyProjects.map { p -> p._id.toString() })
@@ -70,22 +69,25 @@ class MongoAppClient @Inject constructor() {
                 // Reputacion Digital
                 companyProjects = dataInitializer.rdProjects
                 client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
-                val rd = dataInitializer.builRd(companyProjects.map { p -> p._id.toString() })
+                val rd = dataInitializer.buildRd(companyProjects.map { p -> p._id.toString() })
 
 
                 // Cruncho
                 companyProjects = dataInitializer.crunchoProjects
                 client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
-                val cruncho = dataInitializer.builCruncho(companyProjects.map { p -> p._id.toString() })
+                val cruncho = dataInitializer.buildCruncho(companyProjects.map { p -> p._id.toString() })
 
-                // Cruncho
+                //Tracab
+                val tracab = dataInitializer.buildTracab()
+
+                // Solo projects
                 companyProjects = dataInitializer.soloProjects
                 client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
                 val solo = dataInitializer.buildSolo(companyProjects.map { p -> p._id.toString() })
 
 
                 client.getDatabase(db).getCollection<LifeStep>()
-                    .insertMany(arrayListOf(qbit, rd, cruncho, solo))
+                    .insertMany(arrayListOf(qbit, rd, cruncho, tracab, solo))
                 client.getDatabase(db).getCollection<LifeStep>().insertMany(dataInitializer.travelResources)
                 client.getDatabase(db).getCollection<Person>().insertOne(dataInitializer.person)
                 client.getDatabase(db).getCollection<Resource>().insertMany(dataInitializer.resources)

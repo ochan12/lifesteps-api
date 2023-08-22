@@ -272,7 +272,7 @@ data class DataInitializer(val userId: String) {
             italyTravel, argentinaTravel, mexicoTravel, brazilTravel, colombiaTravel, chileTravel, uruguayTravel
         )
 
-    fun builRd(projectsId: List<String>): LifeStep {
+    fun buildRd(projectsId: List<String>): LifeStep {
         return LifeStep.Builder().setName("Reputación digital").setType(StepType.JOB)
             .setDescription("Gather data from different social media platforms to analyse the impact of social actors/companies")
             .setInitialTime(
@@ -289,12 +289,15 @@ data class DataInitializer(val userId: String) {
             .setUserId(userId).setProjects(projectsId).build()
     }
 
-    fun builCruncho(projectsId: List<String>): LifeStep {
+    fun buildCruncho(projectsId: List<String>): LifeStep {
         return LifeStep.Builder().setName("Cruncho").setType(StepType.JOB)
             .setDescription("Create city guides grouping data from different APIs")
             .setInitialTime(
                 Calendar.Builder().setDate(2020, 9, 19).build().timeInMillis
-            ).setProjects(
+            ).setEndTime(
+                Calendar.Builder().setDate(2022, 10, 1).build().timeInMillis
+            )
+            .setProjects(
                 projectsId
             ).setUserId(userId).setPhotos(listOf("/img/jobs/cruncho.png")).setPlace(sweden).build()
     }
@@ -309,6 +312,17 @@ data class DataInitializer(val userId: String) {
             ).setProjects(
                 projectsId
             ).setUserId(userId).setPhotos(listOf("/img/jobs/qbit.png")).build()
+    }
+
+    fun buildTracab():LifeStep {
+        return LifeStep.Builder().setName("Tracab").setType(StepType.JOB)
+            .setDescription("Provide sports statistics for clients")
+            .setPlace(sweden)
+            .setInitialTime(
+                Calendar.Builder().setDate(2022, 10, 2).build().timeInMillis
+            ).setPhotos(
+                listOf("/img/jobs/tracab.png")
+            ).build()
     }
 
     val resources: List<Resource> = listOf(
