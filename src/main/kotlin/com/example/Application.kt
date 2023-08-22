@@ -44,7 +44,7 @@ fun Application.module() {
 }
 
 fun Application.testModule() {
-    val dotenv = Dotenv.configure()
+    val dotenv = Dotenv.configure().ignoreIfMalformed().ignoreIfMissing()
     val appComponent = DaggerTestComponent.create()
     install(ContentNegotiation){
         json()
