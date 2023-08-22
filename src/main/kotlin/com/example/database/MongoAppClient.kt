@@ -78,7 +78,9 @@ class MongoAppClient @Inject constructor() {
                 val cruncho = dataInitializer.buildCruncho(companyProjects.map { p -> p._id.toString() })
 
                 //Tracab
-                val tracab = dataInitializer.buildTracab()
+                companyProjects = dataInitializer.tracabProjects
+                client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
+                val tracab = dataInitializer.buildTracab(companyProjects.map { p -> p._id.toString() })
 
                 // Solo projects
                 companyProjects = dataInitializer.soloProjects

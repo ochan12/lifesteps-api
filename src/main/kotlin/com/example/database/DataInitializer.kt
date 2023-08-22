@@ -99,6 +99,18 @@ data class DataInitializer(val userId: String) {
         Locale("es", "UY").isO3Country
     )
 
+    val poland = Place(
+        "Poland",
+        GeoPosition(lat = (51.9194).toLong(), lon = (19.1451).toLong()),
+        Locale("pl", "PL").isO3Country
+    )
+
+    val norway = Place(
+        "Norway",
+        GeoPosition(lat = (60.4720).toLong(), lon = (8.4689).toLong()),
+        Locale("no", "NO").isO3Country
+    )
+
     val qbitProjects = listOf(
         Project.Builder(
             "Argentinian Localisation", "Extend Netsuite functionality for Argentina"
@@ -165,9 +177,9 @@ data class DataInitializer(val userId: String) {
         Project.Builder("Lifestep API", "Create a simple API to fetch data for my website portfolio")
             .setCompany("Solo")
             .setResources(
-                listOf("kotlin", "heroku", "mongodb")
+                listOf("kotlin", "mongodb")
             ).setUserId(userId).setUrl("https://lifesteps-api.herokuapp.com/").build(),
-        Project.Builder("My website", "YOU'RE HERE!").setResources(listOf("reactjs", "nextjs", "sass"))
+        Project.Builder("My website", "YOU'RE HERE!").setResources(listOf("reactjs", "nextjs", "sass", "typescript"))
             .setUserId(userId)
             .setCompany("Solo").setUrl("https://riggoch.vercel.app/").build(),
         Project.Builder(
@@ -180,6 +192,19 @@ data class DataInitializer(val userId: String) {
             .setResources(listOf("android", "firebase", "dagger", "kotlin")).setUserId(userId)
             .setUrl("https://github.com/ochan12/TimeTracker")
             .setCompany("Solo").build()
+    )
+
+    val tracabProjects = listOf<Project>(
+        Project.Builder("Match Simulator", "Create an application to allow game streaming through internal tools")
+            .setCompany("Tracab")
+            .setResources(
+                listOf("node", "redis", "typescript")
+            ).setUserId(userId).build(),
+        Project.Builder("Backend tasks", "Complete different tasks including bugs, features, endpoints for internal and external usage")
+            .setCompany("Tracab")
+            .setUserId(userId)
+            .setResources(listOf("redis", "mongodb", "express", "javascript", "typescript", "react", "docker", "kubernetes", "bitbucket", "nginx", "kind", "terraform"))
+            .build()
     )
 
     val contact = Contact.Builder().setRepository("https://github.com/ochan12").setEmail("mateochando@gmail.com")
@@ -252,6 +277,13 @@ data class DataInitializer(val userId: String) {
     val uruguayTravel =
         LifeStep.Builder().setName("Uruguay").setType(StepType.TRAVEL).setUserId(userId).setPlace(uruguay)
             .build()
+    val polandTravel =
+        LifeStep.Builder().setName("Poland").setType(StepType.TRAVEL).setUserId(userId).setPlace(poland)
+            .build()
+    val norwayTravel =
+        LifeStep.Builder().setName("Norway").setType(StepType.TRAVEL).setUserId(userId).setPlace(norway)
+            .build()
+
 
     val travelResources: List<LifeStep> =
         listOf(
@@ -269,7 +301,8 @@ data class DataInitializer(val userId: String) {
             franceTravel,
             switzerlandTravel,
             swedenTravel,
-            italyTravel, argentinaTravel, mexicoTravel, brazilTravel, colombiaTravel, chileTravel, uruguayTravel
+            italyTravel, argentinaTravel, mexicoTravel, brazilTravel, colombiaTravel, chileTravel, uruguayTravel,
+            norwayTravel, polandTravel
         )
 
     fun buildRd(projectsId: List<String>): LifeStep {
@@ -314,7 +347,7 @@ data class DataInitializer(val userId: String) {
             ).setUserId(userId).setPhotos(listOf("/img/jobs/qbit.png")).build()
     }
 
-    fun buildTracab():LifeStep {
+    fun buildTracab(projectsId: List<String>):LifeStep {
         return LifeStep.Builder().setName("Tracab").setType(StepType.JOB)
             .setDescription("Provide sports statistics for clients")
             .setPlace(sweden)
@@ -322,7 +355,9 @@ data class DataInitializer(val userId: String) {
                 Calendar.Builder().setDate(2022, 10, 2).build().timeInMillis
             ).setPhotos(
                 listOf("/img/jobs/tracab.png")
-            ).build()
+            ).setProjects(projectsId)
+            .setUserId(userId)
+            .build()
     }
 
     val resources: List<Resource> = listOf(
@@ -390,7 +425,7 @@ data class DataInitializer(val userId: String) {
             "Webpack", "/img/logos/logo_webpack.png", "https://webpack.js.org/", StringId("webpack")
         ), Resource(
             "SASS",
-            "https://sass-lang.com/assets/img/logos/logo-b6e1ef6e.svg",
+            "https://upload.wikimedia.org/wikipedia/commons/9/96/Sass_Logo_Color.svg",
             "https://sass-lang.com/",
             StringId("sass")
         ), Resource(
@@ -440,7 +475,15 @@ data class DataInitializer(val userId: String) {
             "MongoDB", "/img/logos/logo_mongo.svg", "https://www.mongodb.com/", StringId("mongodb")
         ), Resource(
             "Next.js", "/img/logos/logo_nextjs.png", "https://nextjs.org/", StringId("nextjs")
-        )
+        ),
+        Resource(
+            "Terraform",
+            "img/logos/terraform.png",
+            "https://www.terraform.io/",
+            StringId("terraform")
+        ),
+        Resource("Kubernetes", "https://upload.wikimedia.org/wikipedia/commons/3/39/Kubernetes_logo_without_workmark.svg", "https://kubernetes.io/", StringId("kubernetes")),
+        Resource("KIND", "https://upload.wikimedia.org/wikipedia/commons/f/f6/KinD_logo.png", "https://kind.sigs.k8s.io/", StringId("kind"))
     )
 
 
