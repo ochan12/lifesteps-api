@@ -478,7 +478,7 @@ data class DataInitializer(val userId: String) {
         ),
         Resource(
             "Terraform",
-            "img/logos/terraform.png",
+            "/img/logos/logo_terraform.png",
             "https://www.terraform.io/",
             StringId("terraform")
         ),
