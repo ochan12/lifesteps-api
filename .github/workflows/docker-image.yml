@@ -16,3 +16,5 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ochan12/lifesteps-api:$(date +%s)
+    - name: Push the image
+      run: docker push ochan12/lifesteps-api:$(date +%s)
