@@ -20,5 +20,6 @@ jobs:
         docker tag ochan12/lifesteps-api:$GITHUB_SHA ochan12/lifesteps-api:latest
     - name: Push the image
       run: |
+        docker login -u ochan12 -p $DOCKER_PASS
         docker push ochan12/lifesteps-api:$GITHUB_SHA
         docker push ochan12/lifesteps-api:latest
