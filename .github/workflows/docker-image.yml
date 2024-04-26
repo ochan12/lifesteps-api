@@ -22,7 +22,7 @@ jobs:
     - name: Push the image
       shell: bash
       run: |
-        docker login -u ochan12 -p $DOCKER_PASS
+        docker login -u ochan12 -p "$DOCKER_PASS"
         docker push ochan12/lifesteps-api:$GITHUB_SHA
         docker push ochan12/lifesteps-api:latest
       env:
