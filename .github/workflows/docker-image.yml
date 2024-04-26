@@ -15,10 +15,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
+      shell: bash
       run: |
         docker build . --file Dockerfile --tag ochan12/lifesteps-api:$GITHUB_SHA
         docker tag ochan12/lifesteps-api:$GITHUB_SHA ochan12/lifesteps-api:latest
     - name: Push the image
+      shell: bash
       run: |
         docker login -u ochan12 -p $DOCKER_PASS
         docker push ochan12/lifesteps-api:$GITHUB_SHA
