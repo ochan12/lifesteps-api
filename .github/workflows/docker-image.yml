@@ -23,4 +23,4 @@ jobs:
       with:
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ochan12/lifesteps-api:$GITHUB_SHA,ochan12/lifesteps-api:latest
+        tags: ochan12/lifesteps-api:latest
