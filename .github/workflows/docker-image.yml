@@ -18,13 +18,9 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASS }}
-    - name: Build the Docker image
-      shell: bash
-      run: |
-        docker build . --file Dockerfile --tag ochan12/lifesteps-api:$GITHUB_SHA
-        docker tag ochan12/lifesteps-api:$GITHUB_SHA ochan12/lifesteps-api:latest
-    - name: Push the image
-      shell: bash
-      run: |
-        docker push ochan12/lifesteps-api:$GITHUB_SHA
-        docker push ochan12/lifesteps-api:latest
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ochan12/lifesteps-api:$GITHUB_SHA,ochan12/lifesteps-api:latest
