@@ -82,6 +82,8 @@ class MongoAppClient @Inject constructor() {
                 client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
                 val tracab = dataInitializer.buildTracab(companyProjects.map { p -> p._id.toString() })
 
+                val insurely = dataInitializer.buildInsurely(arrayListOf())
+
                 // Solo projects
                 companyProjects = dataInitializer.soloProjects
                 client.getDatabase(db).getCollection<Project>().insertMany(companyProjects)
@@ -89,7 +91,7 @@ class MongoAppClient @Inject constructor() {
 
 
                 client.getDatabase(db).getCollection<LifeStep>()
-                    .insertMany(arrayListOf(qbit, rd, cruncho, tracab, solo))
+                    .insertMany(arrayListOf(qbit, rd, cruncho, tracab, insurely, solo))
                 client.getDatabase(db).getCollection<LifeStep>().insertMany(dataInitializer.travelResources)
                 client.getDatabase(db).getCollection<Person>().insertOne(dataInitializer.person)
                 client.getDatabase(db).getCollection<Resource>().insertMany(dataInitializer.resources)

@@ -111,6 +111,18 @@ data class DataInitializer(val userId: String) {
         Locale("no", "NO").isO3Country
     )
 
+    val croatia = Place(
+        "Croatia",
+        GeoPosition(lat = (45.8150).toLong(), lon = (15.9819).toLong()),
+        Locale("hr", "HR").isO3Country
+    )
+
+    val turkey = Place(
+        "Turkey",
+        GeoPosition(lat = (39.9289).toLong(), lon = (32.8560).toLong()),
+        Locale("tr", "TR").isO3Country
+    )
+
     val qbitProjects = listOf(
         Project.Builder(
             "Argentinian Localisation", "Extend Netsuite functionality for Argentina"
@@ -200,10 +212,28 @@ data class DataInitializer(val userId: String) {
             .setResources(
                 listOf("node", "redis", "typescript")
             ).setUserId(userId).build(),
-        Project.Builder("Backend tasks", "Complete different tasks including bugs, features, endpoints for internal and external usage")
+        Project.Builder(
+            "Backend tasks",
+            "Complete different tasks including bugs, features, endpoints for internal and external usage"
+        )
             .setCompany("Tracab")
             .setUserId(userId)
-            .setResources(listOf("redis", "mongodb", "express", "javascript", "typescript", "react", "docker", "kubernetes", "bitbucket", "nginx", "kind", "terraform"))
+            .setResources(
+                listOf(
+                    "redis",
+                    "mongodb",
+                    "express",
+                    "javascript",
+                    "typescript",
+                    "react",
+                    "docker",
+                    "kubernetes",
+                    "bitbucket",
+                    "nginx",
+                    "kind",
+                    "terraform"
+                )
+            )
             .build()
     )
 
@@ -283,6 +313,12 @@ data class DataInitializer(val userId: String) {
     val norwayTravel =
         LifeStep.Builder().setName("Norway").setType(StepType.TRAVEL).setUserId(userId).setPlace(norway)
             .build()
+    val croatiaTravel =
+        LifeStep.Builder().setName("Croatia").setType(StepType.TRAVEL).setUserId(userId).setPlace(croatia)
+            .build()
+    val turkeyTravel =
+        LifeStep.Builder().setName("Turkey").setType(StepType.TRAVEL).setUserId(userId).setPlace(turkey)
+            .build()
 
 
     val travelResources: List<LifeStep> =
@@ -347,14 +383,29 @@ data class DataInitializer(val userId: String) {
             ).setUserId(userId).setPhotos(listOf("/img/jobs/qbit.png")).build()
     }
 
-    fun buildTracab(projectsId: List<String>):LifeStep {
+    fun buildTracab(projectsId: List<String>): LifeStep {
         return LifeStep.Builder().setName("Tracab").setType(StepType.JOB)
             .setDescription("Provide sports statistics for clients")
             .setPlace(sweden)
             .setInitialTime(
                 Calendar.Builder().setDate(2022, 10, 2).build().timeInMillis
+            ).setEndTime(
+                Calendar.Builder().setDate(2025, 6, 30).build().timeInMillis
             ).setPhotos(
                 listOf("/img/jobs/tracab.png")
+            ).setProjects(projectsId)
+            .setUserId(userId)
+            .build()
+    }
+
+    fun buildInsurely(projectsId: List<String>): LifeStep {
+        return LifeStep.Builder().setName("Insurely").setType(StepType.JOB)
+            .setDescription("Proper peace of mind")
+            .setPlace(sweden)
+            .setInitialTime(
+                Calendar.Builder().setDate(2025, 8, 1).build().timeInMillis
+            ).setPhotos(
+                listOf("/img/jobs/insurely.png")
             ).setProjects(projectsId)
             .setUserId(userId)
             .build()
@@ -445,7 +496,7 @@ data class DataInitializer(val userId: String) {
             StringId("heroku")
         ), Resource(
             "Kotlin",
-            "https://upload.wikimedia.org/wikipedia/commons/0/06/Kotlin_Icon.svg",
+            "/img/logos/logo_kotlin.svg",
             "https://kotlinlang.org/",
             StringId("kotlin")
         ), Resource(
@@ -482,8 +533,18 @@ data class DataInitializer(val userId: String) {
             "https://www.terraform.io/",
             StringId("terraform")
         ),
-        Resource("Kubernetes", "https://upload.wikimedia.org/wikipedia/commons/3/39/Kubernetes_logo_without_workmark.svg", "https://kubernetes.io/", StringId("kubernetes")),
-        Resource("KIND", "https://upload.wikimedia.org/wikipedia/commons/f/f6/KinD_logo.png", "https://kind.sigs.k8s.io/", StringId("kind"))
+        Resource(
+            "Kubernetes",
+            "https://upload.wikimedia.org/wikipedia/commons/3/39/Kubernetes_logo_without_workmark.svg",
+            "https://kubernetes.io/",
+            StringId("kubernetes")
+        ),
+        Resource(
+            "KIND",
+            "https://upload.wikimedia.org/wikipedia/commons/f/f6/KinD_logo.png",
+            "https://kind.sigs.k8s.io/",
+            StringId("kind")
+        )
     )
 
 
