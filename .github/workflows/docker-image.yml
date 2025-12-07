@@ -1,4 +1,3 @@
-
 name: Docker
 
 on:
@@ -82,9 +81,12 @@ jobs:
     needs: build
 
     steps:
-      - name: Log into registry
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create and push manifest
         run: |
