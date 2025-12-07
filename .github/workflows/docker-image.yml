@@ -72,8 +72,7 @@ jobs:
       - name: Capture digest
         id: digest
         run: |
-          DIGEST=$(jq -r '."containerimage.digest"' < ${{ steps.build.outputs.metadata }})
-          echo "${{ matrix.arch }}_digest=$DIGEST" >> $GITHUB_OUTPUT
+          echo "${{ matrix.arch }}_digest=${{ steps.build.outputs.metadata }}" >> $GITHUB_OUTPUT
 
   manifest:
     runs-on: ubuntu-latest
