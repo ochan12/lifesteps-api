@@ -1,3 +1,4 @@
+
 name: Docker
 
 on:
@@ -21,6 +22,10 @@ jobs:
       contents: read
       packages: write
       id-token: write
+
+    outputs:
+      amd64_digest: ${{ steps.digest.outputs.amd64_digest }}
+      arm64_digest: ${{ steps.digest.outputs.arm64_digest }}
 
     steps:
       - uses: actions/checkout@v4
@@ -51,11 +56,13 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push image for ${{ matrix.arch }}
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/${{ matrix.arch }}
           push: true
+          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.arch }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -63,16 +70,28 @@ jobs:
             TARGETARCH=${{ matrix.arch }}
             TARGETOS=linux
 
+      - name: Capture digest
+        id: digest
+        run: |
+          DIGEST=$(jq -r '."containerimage.digest"' < ${{ steps.build.outputs.metadata }})
+          echo "${{ matrix.arch }}_digest=$DIGEST" >> $GITHUB_OUTPUT
+
   # Combine both arch-specific images into a single manifest
   manifest:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
+      - name: Log into registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
+
       - name: Create and push manifest
         run: |
-          docker login $REGISTRY -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          docker manifest create $REGISTRY/${{ env.IMAGE_NAME }}:latest \
-            --amend $REGISTRY/${{ env.IMAGE_NAME }}:amd64 \
-            --amend $REGISTRY/${{ env.IMAGE_NAME }}:arm64
-          docker manifest push $REGISTRY/${{ env.IMAGE_NAME }}:latest
+          IMAGE=$REGISTRY/${{ env.IMAGE_NAME }}
+
+          docker manifest create $IMAGE:latest \
+            --amend $IMAGE@${{ needs.build.outputs.amd64_digest }} \
+            --amend $IMAGE@${{ needs.build.outputs.arm64_digest }}
+
+          docker manifest push $IMAGE:latest
