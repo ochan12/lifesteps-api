@@ -72,7 +72,7 @@ jobs:
       - name: Capture digest
         id: digest
         run: |
-          echo "${{ matrix.arch }}_digest=${{ steps.build.outputs.metadata }}" >> $GITHUB_OUTPUT
+          echo "${{ matrix.arch }}_digest=${{ steps.build.outputs.digest }}" >> $GITHUB_OUTPUT
 
   manifest:
     runs-on: ubuntu-latest
