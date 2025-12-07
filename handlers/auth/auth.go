@@ -4,7 +4,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
-	"log"
 	"net/http"
 	"strings"
 
@@ -42,14 +41,13 @@ func RegisterAuthHandler(r *gin.Engine, dataSource datasource.DataSource, cfg co
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid auth format"})
 			return
 		}
+
 		username, password := parts[0], parts[1]
-		log.Default().Printf("Auth username: %s %s %s", username, password, hashPassword(password, cfg.AuthSalt))
 		user, err := dataSource.GetUser(username, hashPassword(password, cfg.AuthSalt))
 		if err != nil || user == nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 			return
 		}
-		log.Default().Printf("Auth user: %s", user.ID.Hex())
 		c.Set("user", user)
 		c.Next()
 	})

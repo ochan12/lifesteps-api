@@ -2,6 +2,7 @@ package datasource
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -63,7 +64,6 @@ func (m *MongoDataSource) GetLifeSteps(userID string) ([]models.LifeStep, error)
 	return steps, nil
 }
 
-// GetLifeStepsByType retrieves life steps of a specific type for a user.
 func (m *MongoDataSource) GetLifeStepsByType(stepType models.StepType, userID string) ([]models.LifeStep, error) {
 	filter := bson.M{"userId": userID, "type": stepType}
 	cursor, err := m.lifeStepsColl.Find(context.Background(), filter)
@@ -79,7 +79,6 @@ func (m *MongoDataSource) GetLifeStepsByType(stepType models.StepType, userID st
 	return steps, nil
 }
 
-// PostLifeStep inserts a new life step and returns its ObjectID.
 func (m *MongoDataSource) PostLifeStep(step models.LifeStep) (string, error) {
 	if !step.Validate() {
 		return "", mongo.ErrInvalidIndexValue
@@ -91,7 +90,6 @@ func (m *MongoDataSource) PostLifeStep(step models.LifeStep) (string, error) {
 	return res.InsertedID.(bson.ObjectID).Hex(), nil
 }
 
-// GetContactData retrieves the contact information for a user.
 func (m *MongoDataSource) GetContactData(userID string) (*models.Contact, error) {
 	filter := bson.M{"userId": userID}
 	var person models.Person
@@ -105,7 +103,6 @@ func (m *MongoDataSource) GetContactData(userID string) (*models.Contact, error)
 	return person.Contact, nil
 }
 
-// GetPersonData retrieves personal data for a user.
 func (m *MongoDataSource) GetPersonData(userID string) (*models.Person, error) {
 	filter := bson.M{"userId": userID}
 	var person models.Person
@@ -119,7 +116,6 @@ func (m *MongoDataSource) GetPersonData(userID string) (*models.Person, error) {
 	return &person, nil
 }
 
-// GetProjects retrieves multiple projects by their IDs.
 func (m *MongoDataSource) GetProjects(ids []string) ([]models.Project, error) {
 	if len(ids) == 0 {
 		return []models.Project{}, nil
@@ -142,7 +138,6 @@ func (m *MongoDataSource) GetProjects(ids []string) ([]models.Project, error) {
 	return projects, nil
 }
 
-// GetResources retrieves multiple resources by their IDs.
 func (m *MongoDataSource) GetResources(ids []string) ([]models.Resource, error) {
 	if len(ids) == 0 {
 		return []models.Resource{}, nil
@@ -161,7 +156,6 @@ func (m *MongoDataSource) GetResources(ids []string) ([]models.Resource, error) 
 	return resources, nil
 }
 
-// GetUser retrieves a user by username and token.
 func (m *MongoDataSource) GetUser(username, token string) (*models.User, error) {
 	log.Default().Printf("username %s password %s", username, token)
 	filter := bson.M{"username": username, "password": token}
@@ -176,7 +170,6 @@ func (m *MongoDataSource) GetUser(username, token string) (*models.User, error) 
 	return &user, nil
 }
 
-// CreatePerson inserts a new person and returns its ObjectID.
 func (m *MongoDataSource) CreatePerson(ctx context.Context, person *models.Person) (string, error) {
 	res, err := m.personsColl.InsertOne(ctx, person)
 	if err != nil {
@@ -185,7 +178,6 @@ func (m *MongoDataSource) CreatePerson(ctx context.Context, person *models.Perso
 	return res.InsertedID.(bson.ObjectID).Hex(), nil
 }
 
-// CreateProject inserts a new project and returns its ObjectID.
 func (m *MongoDataSource) CreateProject(ctx context.Context, project *models.Project) (string, error) {
 	res, err := m.projectsColl.InsertOne(ctx, project)
 	if err != nil {
@@ -194,22 +186,15 @@ func (m *MongoDataSource) CreateProject(ctx context.Context, project *models.Pro
 	return res.InsertedID.(bson.ObjectID).Hex(), nil
 }
 
-// CreateResource inserts a new resource and returns its ID.
 func (m *MongoDataSource) CreateResource(ctx context.Context, resource *models.Resource) (string, error) {
-	ID, err := bson.ObjectIDFromHex(resource.ID)
-	r := &models.DBResource{
-		Resource: *resource,
-		ID:       ID,
-	}
-	_, err = m.resourcesColl.InsertOne(ctx, r)
+	_, err := m.resourcesColl.InsertOne(ctx, resource)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error inserting resources %v", err)
 	}
 	// Resource uses string ID, so return the resource's ID
 	return resource.ID, nil
 }
 
-// CreatePerson inserts a new person and returns its ObjectID.
 func (m *MongoDataSource) CreateUser(ctx context.Context, user *models.User) (string, error) {
 	res, err := m.usersColl.InsertOne(ctx, user)
 	if err != nil {

@@ -94,11 +94,6 @@ type Resource struct {
 	URL  string `bson:"url" json:"url"`
 }
 
-type DBResource struct {
-	Resource
-	ID bson.ObjectID `bson:"_id,omitempty" json:"id"`
-}
-
 // User represents authentication data.
 type User struct {
 	ID       *bson.ObjectID `bson:"_id,omitempty" json:"id"`
