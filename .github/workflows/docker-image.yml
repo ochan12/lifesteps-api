@@ -14,7 +14,6 @@ jobs:
       matrix:
         arch: [amd64, arm64]
 
-    # Native runners
     runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
 
     permissions:
@@ -61,9 +60,10 @@ jobs:
           context: .
           platforms: linux/${{ matrix.arch }}
           push: true
+          #
+          # IMPORTANT: remove tags here → push only by digest
+          #
           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.arch }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             TARGETARCH=${{ matrix.arch }}
@@ -75,7 +75,6 @@ jobs:
           DIGEST=$(jq -r '."containerimage.digest"' < ${{ steps.build.outputs.metadata }})
           echo "${{ matrix.arch }}_digest=$DIGEST" >> $GITHUB_OUTPUT
 
-  # Combine both arch-specific images into a single manifest
   manifest:
     runs-on: ubuntu-latest
     needs: build
@@ -88,12 +87,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create and push manifest
+      - name: Tag architecture images + create manifest
         run: |
           IMAGE=$REGISTRY/${{ env.IMAGE_NAME }}
 
-          docker manifest create $IMAGE:latest \
-            --amend $IMAGE@${{ needs.build.outputs.amd64_digest }} \
-            --amend $IMAGE@${{ needs.build.outputs.arm64_digest }}
+          # Tag architecture-specific digests properly
+          docker buildx imagetools create -t $IMAGE:amd64 $IMAGE@${{ needs.build.outputs.amd64_digest }}
+          docker buildx imagetools create -t $IMAGE:arm64 $IMAGE@${{ needs.build.outputs.arm64_digest }}
 
-          docker manifest push $IMAGE:latest
+          # Create latest manifest
+          docker buildx imagetools create -t $IMAGE:latest \
+            $IMAGE@${{ needs.build.outputs.amd64_digest }} \
+            $IMAGE@${{ needs.build.outputs.arm64_digest }}
