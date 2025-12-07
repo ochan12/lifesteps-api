@@ -1,3 +1,5 @@
+//go:generate mockgen -package contact -source=contact.go -destination=contact_mock_test.go -typed true
+
 package contact
 
 import (

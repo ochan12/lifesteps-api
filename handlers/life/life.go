@@ -1,3 +1,5 @@
+//go:generate mockgen -package life -source=life.go -destination=life_mock_test.go -typed true
+
 package life
 
 import (

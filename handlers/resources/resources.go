@@ -1,3 +1,5 @@
+//go:generate mockgen -package resources -source=resources.go -destination=resources_mock_test.go -typed true
+
 package resources
 
 import (

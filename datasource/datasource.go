@@ -3,7 +3,6 @@ package datasource
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
@@ -157,7 +156,6 @@ func (m *MongoDataSource) GetResources(ids []string) ([]models.Resource, error) 
 }
 
 func (m *MongoDataSource) GetUser(username, token string) (*models.User, error) {
-	log.Default().Printf("username %s password %s", username, token)
 	filter := bson.M{"username": username, "password": token}
 	var user models.User
 	err := m.usersColl.FindOne(context.Background(), filter).Decode(&user)

@@ -1,3 +1,5 @@
+//go:generate mockgen -package person -source=person.go -destination=person_mock_test.go -typed true
+
 package person
 
 import (
