@@ -1,5 +1,5 @@
 # Build stage
-FROM --platform=$BUILDPLATFORM golang:1.25.3 AS build
+FROM --platform=$BUILDPLATFORM golang:1.25.5 AS build
 WORKDIR /src
 
 COPY . .
