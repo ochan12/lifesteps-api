@@ -5,7 +5,7 @@ go 1.25.3
 require (
 	github.com/gin-gonic/gin v1.11.0
 	github.com/joho/godotenv v1.5.1
-	go.mongodb.org/mongo-driver/v2 v2.4.1
+	go.mongodb.org/mongo-driver/v2 v2.4.2
 	go.uber.org/mock v0.6.0
 )
 
